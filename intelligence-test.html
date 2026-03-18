@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXIQ — اختبار الذكاء المتكامل</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07070f;--surface:#0e0e1c;--card:#13132a;--border:#1e1e3a;--purple:#7c3aed;--pl:#a855f7;--pg:#c084fc;--accent:#06b6d4;--green:#10b981;--text:#f1f0ff;--muted:#6b6b8a;--danger:#ef4444;--gold:#f59e0b;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Tajawal',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 20%,rgba(124,58,237,.08) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(6,182,212,.05) 0%,transparent 60%);pointer-events:none;z-index:0;}
+.screen{display:none;position:relative;z-index:1;min-height:100vh;}
+.screen.active{display:flex;}
+/* LANDING */
+#landing{flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;animation:fadeIn .8s ease;}
+.logo-mark{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.4em;color:var(--pl);text-transform:uppercase;margin-bottom:2rem;opacity:.8;}
+.landing-title{font-size:clamp(2.8rem,7vw,5rem);font-weight:900;line-height:1.05;background:linear-gradient(135deg,#fff 0%,var(--pg) 50%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.5rem;}
+.landing-sub{font-size:1.05rem;color:var(--muted);max-width:460px;line-height:1.7;margin-bottom:2.5rem;font-weight:300;}
+.landing-stats{display:flex;gap:2.5rem;margin-bottom:2.5rem;justify-content:center;}
+.stat-num{font-family:'Space Mono',monospace;font-size:1.7rem;font-weight:700;color:var(--pl);display:block;}
+.stat-label{font-size:.75rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.btn-group{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
+.btn-p{padding:1rem 2.5rem;background:linear-gradient(135deg,var(--purple),var(--pl));border:none;border-radius:12px;color:#fff;font-family:'Tajawal',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 0 30px rgba(124,58,237,.3);}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(124,58,237,.5);}
+.btn-g{padding:1rem 2.5rem;background:transparent;border:1px solid var(--border);border-radius:12px;color:var(--muted);font-family:'Tajawal',sans-serif;font-size:1rem;cursor:pointer;transition:all .3s;}
+.btn-g:hover{border-color:var(--purple);color:var(--pl);}
+.divider{width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--purple),transparent);margin:2rem auto;}
+/* REGISTRATION */
+#registration{flex-direction:column;align-items:center;justify-content:center;padding:2rem;}
+.reg-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:2.5rem;width:100%;max-width:440px;}
+.reg-title{font-size:1.5rem;font-weight:800;margin-bottom:.3rem;}
+.reg-sub{font-size:.88rem;color:var(--muted);margin-bottom:2rem;}
+.f-label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:.4rem;font-weight:500;}
+.f-input{width:100%;padding:.85rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:.95rem;outline:none;margin-bottom:1.1rem;transition:border-color .2s;}
+.f-input:focus{border-color:var(--purple);}
+.gender-group{display:flex;gap:.6rem;margin-bottom:1.2rem;}
+.gender-btn{flex:1;padding:.7rem .5rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Tajawal',sans-serif;font-size:.9rem;cursor:pointer;transition:all .2s;text-align:center;}
+.gender-btn.sel{border-color:var(--purple);color:var(--pl);background:rgba(124,58,237,.1);}
+/* Social login buttons */
+.social-divider{display:flex;align-items:center;gap:.75rem;margin:1rem 0;}
+.social-divider::before,.social-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.social-divider span{font-size:.78rem;color:var(--muted);}
+.social-btns{display:flex;gap:.6rem;margin-bottom:1rem;}
+.social-btn{flex:1;padding:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:.82rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;position:relative;}
+.social-btn:hover{border-color:var(--purple);background:rgba(124,58,237,.06);}
+.soon-tag{position:absolute;top:-6px;right:-4px;background:var(--gold);color:#000;font-size:.55rem;font-weight:700;padding:.1rem .35rem;border-radius:4px;font-family:'Space Mono',monospace;}
+.social-icon{width:18px;height:18px;flex-shrink:0;}
+.back-btn{background:none;border:none;color:var(--muted);font-family:'Tajawal',sans-serif;font-size:.85rem;cursor:pointer;margin-top:.75rem;display:block;}
+/* INTRO */
+#intro{flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;}
+.sec-chips{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;max-width:560px;margin:1.5rem auto;}
+.sec-chip{padding:.65rem .75rem;background:var(--card);border:1px solid var(--border);border-radius:10px;font-size:.82rem;color:var(--muted);}
+.sec-chip span{display:block;font-size:1.1rem;margin-bottom:.2rem;}
+/* QUIZ */
+#quiz{flex-direction:column;padding:1.5rem;}
+.qhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.75rem;}
+.sec-badge{padding:.35rem .9rem;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:100px;font-size:.78rem;color:var(--pl);}
+.prog-wrap{flex:1;max-width:380px;margin:0 .75rem;}
+.prog-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-bottom:.35rem;font-family:'Space Mono',monospace;}
+.prog-bar{height:3px;background:var(--border);border-radius:100px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--pl));border-radius:100px;transition:width .4s;box-shadow:0 0 6px var(--purple);}
+.hdr-right{display:flex;align-items:center;gap:.6rem;}
+.hearts-wrap{display:flex;gap:.25rem;}
+.heart{font-size:1.15rem;transition:all .3s;line-height:1;}
+.heart.empty{opacity:.25;filter:grayscale(1);}
+.back-q-btn{padding:.4rem .8rem;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);border-radius:7px;color:var(--pl);font-family:'Tajawal',sans-serif;font-size:.78rem;cursor:pointer;transition:all .2s;}
+.back-q-btn:hover{background:rgba(124,58,237,.22);}
+.back-q-btn:disabled{opacity:.25;cursor:not-allowed;}
+.timer-circ{width:48px;height:48px;position:relative;flex-shrink:0;}
+.timer-circ svg{transform:rotate(-90deg);width:48px;height:48px;}
+.t-track{fill:none;stroke:var(--border);stroke-width:3;}
+.t-arc{fill:none;stroke:var(--pl);stroke-width:3;stroke-linecap:round;stroke-dasharray:138.23;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .3s;}
+.t-arc.urgent{stroke:var(--danger);}
+.t-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700;}
+.quiz-body{flex:1;display:flex;flex-direction:column;align-items:center;max-width:720px;margin:0 auto;width:100%;}
+.q-num{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);letter-spacing:.15em;margin-bottom:.75rem;align-self:flex-start;}
+.diff-badge{display:inline-block;font-size:.65rem;font-family:'Space Mono',monospace;padding:.2rem .5rem;border-radius:4px;margin-right:.5rem;}
+.diff-easy{background:rgba(16,185,129,.1);color:var(--green);}
+.diff-med{background:rgba(245,158,11,.1);color:var(--gold);}
+.diff-hard{background:rgba(239,68,68,.1);color:var(--danger);}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2rem;width:100%;margin-bottom:1.2rem;}
+.q-tag{font-size:.7rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem;font-family:'Space Mono',monospace;}
+.q-row{display:flex;align-items:flex-start;gap:1rem;}
+.q-text{font-size:1.1rem;font-weight:600;line-height:1.65;flex:1;}
+.q-thumb{width:80px;height:70px;flex-shrink:0;border-radius:8px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all .2s;background:var(--surface);}
+.q-thumb:hover{border-color:var(--purple);transform:scale(1.04);}
+.q-thumb svg{width:100%;height:100%;}
+.lbox{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
+.lbox.open{opacity:1;pointer-events:all;}
+.lbox-inner{max-width:520px;width:90%;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;position:relative;}
+.lbox-close{position:absolute;top:.75rem;left:.75rem;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;}
+.lbox-svg svg{width:100%;}
+.lbox-cap{font-size:.82rem;color:var(--muted);margin-top:.6rem;text-align:center;line-height:1.5;}
+.opts{display:grid;gap:.65rem;width:100%;}
+.opt{padding:.9rem 1.2rem;background:var(--surface);border:1px solid var(--border);border-radius:11px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:.95rem;font-weight:500;cursor:pointer;text-align:right;transition:all .2s;display:flex;align-items:center;gap:.65rem;line-height:1.5;}
+.opt-l{width:26px;height:26px;background:var(--border);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);flex-shrink:0;transition:all .2s;}
+.opt:hover{border-color:var(--purple);background:rgba(124,58,237,.07);}
+.opt:hover .opt-l{background:rgba(124,58,237,.3);color:var(--pl);}
+.opt.sel{border-color:var(--pl);background:rgba(124,58,237,.11);}
+.opt.sel .opt-l{background:var(--purple);color:#fff;}
+.opt.dk{color:var(--muted);font-style:italic;border-style:dashed;}
+.opt.dk.sel{border-color:var(--muted);background:rgba(107,107,138,.1);}
+.opt.dk.sel .opt-l{background:var(--muted);color:#fff;}
+.next-btn{padding:.85rem 2.2rem;background:linear-gradient(135deg,var(--purple),var(--pl));border:none;border-radius:11px;color:#fff;font-family:'Tajawal',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:.4rem;align-self:flex-start;}
+.next-btn:hover{transform:translateY(-1px);}
+.sec-trans{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .5s;}
+.sec-trans.show{opacity:1;pointer-events:all;}
+.sec-trans-icon{font-size:3rem;margin-bottom:1rem;animation:pulse 1.5s infinite;}
+.sec-trans-title{font-size:1.6rem;font-weight:800;color:var(--pl);margin-bottom:.4rem;}
+.sec-trans-sub{color:var(--muted);font-size:.95rem;}
+/* RESULTS */
+#results{flex-direction:column;align-items:center;padding:2rem;animation:fadeIn .8s ease;}
+.res-inner{max-width:780px;width:100%;margin:0 auto;}
+.res-hdr{text-align:center;margin-bottom:2.5rem;}
+.res-hdr h2{font-size:.88rem;font-weight:400;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:.4rem;}
+.res-name{font-size:1.8rem;font-weight:800;}
+.elo-sec{display:flex;flex-direction:column;align-items:center;margin-bottom:2.5rem;}
+.elo-wrap{position:relative;width:240px;height:180px;margin-bottom:.75rem;}
+.elo-svg{width:240px;height:240px;position:absolute;top:-30px;}
+.elo-track{fill:none;stroke:#1a1a30;stroke-width:13;stroke-linecap:round;}
+.elo-arc{fill:none;stroke:url(#eloG);stroke-width:13;stroke-linecap:round;stroke-dasharray:534;stroke-dashoffset:534;filter:drop-shadow(0 0 7px rgba(168,85,247,.7));transition:stroke-dashoffset 2.5s cubic-bezier(.16,1,.3,1);}
+.elo-ctr{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);text-align:center;}
+.elo-num{font-family:'Space Mono',monospace;font-size:2.8rem;font-weight:700;line-height:1;}
+.elo-lbl{font-size:.8rem;color:var(--pl);font-weight:600;margin-top:.25rem;}
+.elo-tier{text-align:center;margin-top:.4rem;}
+.elo-tier-name{font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--pl),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.2rem;}
+.elo-tier-desc{font-size:.85rem;color:var(--muted);}
+.elo-compare{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.3rem;margin-bottom:1.5rem;}
+.elo-compare-title{font-size:.7rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:.9rem;}
+.elo-ladder{display:flex;flex-direction:column;gap:.35rem;}
+.elo-rung{display:flex;align-items:center;gap:.65rem;padding:.4rem .7rem;border-radius:7px;}
+.elo-rung.act{background:rgba(124,58,237,.11);border:1px solid rgba(124,58,237,.28);}
+.elo-rng{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted);width:85px;flex-shrink:0;}
+.elo-rb{flex:1;height:3px;background:var(--border);border-radius:100px;overflow:hidden;}
+.elo-rbf{height:100%;border-radius:100px;}
+.elo-rl{font-size:.78rem;font-weight:600;width:115px;flex-shrink:0;}
+.elo-rc{font-size:.68rem;color:var(--muted);font-style:italic;width:85px;flex-shrink:0;}
+.sec-results{margin-bottom:1.5rem;}
+.sec-rc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin-bottom:.85rem;position:relative;overflow:hidden;}
+.sec-rc::before{content:'';position:absolute;top:0;right:0;bottom:0;width:3px;background:var(--sc,var(--purple));}
+.sec-rh{display:flex;align-items:center;gap:.85rem;margin-bottom:.7rem;}
+.sec-ri{font-size:1.4rem;}
+.sec-rn{font-size:.95rem;font-weight:700;}
+.sec-rb-wrap{height:4px;background:var(--border);border-radius:100px;overflow:hidden;margin-bottom:.65rem;}
+.sec-rb-fill{height:100%;border-radius:100px;transition:width 1.5s cubic-bezier(.16,1,.3,1) .5s;}
+.sec-rd{font-size:.87rem;color:var(--muted);line-height:1.6;}
+.sec-pct{margin-right:auto;font-family:'Space Mono',monospace;font-size:.78rem;padding:.22rem .6rem;border-radius:100px;}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:.9rem;margin-bottom:1.5rem;}
+.dc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.3rem;text-align:center;position:relative;overflow:hidden;}
+.dc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--ca);}
+.dc-icon{font-size:1.5rem;margin-bottom:.35rem;}
+.dc-lbl{font-size:.7rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.45rem;font-family:'Space Mono',monospace;}
+.dc-val{font-size:1.3rem;font-weight:800;margin-bottom:.15rem;}
+.dc-sub{font-size:.78rem;color:var(--muted);line-height:1.5;}
+.dc-bar{margin-top:.5rem;height:3px;background:var(--border);border-radius:100px;overflow:hidden;}
+.dc-barf{height:100%;border-radius:100px;transition:width 1.5s cubic-bezier(.16,1,.3,1) .5s;}
+.mbti-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.6rem;margin-bottom:.85rem;display:flex;align-items:center;gap:1.3rem;}
+.mbti-type{font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:var(--pl);flex-shrink:0;}
+.mbti-info h3{font-size:1rem;font-weight:700;margin-bottom:.25rem;}
+.mbti-info p{font-size:.87rem;color:var(--muted);line-height:1.6;}
+.traits-sec{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.6rem;margin-bottom:1.3rem;}
+.traits-title{font-size:.72rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:1rem;}
+.tr-row{display:flex;align-items:center;gap:.85rem;margin-bottom:.8rem;}
+.tr-name{font-size:.82rem;color:var(--muted);width:90px;flex-shrink:0;text-align:right;}
+.tr-bar{flex:1;height:5px;background:var(--border);border-radius:100px;overflow:hidden;}
+.tr-barf{height:100%;border-radius:100px;transition:width 1.5s cubic-bezier(.16,1,.3,1) .8s;}
+.tr-pct{font-family:'Space Mono',monospace;font-size:.72rem;width:32px;text-align:left;flex-shrink:0;}
+.restart{width:100%;padding:1rem;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--muted);font-family:'Tajawal',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;margin-top:.85rem;}
+.restart:hover{border-color:var(--purple);color:var(--pl);}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes heartLost{0%{transform:scale(1.6)}100%{transform:scale(1)}}
+@media(max-width:600px){.sec-chips{grid-template-columns:repeat(2,1fr);}.mbti-card{flex-direction:column;text-align:center;}.landing-stats{gap:1.5rem;}.elo-rc{display:none;}}
+</style>
+</head>
+<body>
+
+<div id="landing" class="screen active">
+  <div class="logo-mark">NEXIQ · Intelligence Assessment</div>
+  <h1 class="landing-title">اكتشف<br>عقلك الحقيقي</h1>
+  <p class="landing-sub">100 سؤال معايرة أكاديمية في 5 محاور — ترتيب عشوائي مختلف في كل مرة</p>
+  <div class="landing-stats">
+    <div><span class="stat-num">100</span><span class="stat-label">سؤال</span></div>
+    <div><span class="stat-num">5</span><span class="stat-label">محاور</span></div>
+    <div><span class="stat-num">~35</span><span class="stat-label">دقيقة</span></div>
+  </div>
+  <div class="btn-group">
+    <button class="btn-p" onclick="showReg('guest')">ابدأ كضيف</button>
+    <button class="btn-g" onclick="showReg('login')">تسجيل الدخول</button>
+  </div>
+  <div class="divider"></div>
+</div>
+
+<div id="registration" class="screen">
+  <div class="reg-card">
+    <h2 class="reg-title" id="regTitle">بداية الاختبار</h2>
+    <p class="reg-sub" id="regSub">أخبرنا عنك قبل أن نبدأ</p>
+    <div class="social-btns">
+      <button class="social-btn" onclick="socialNotReady(this)">
+        <span class="soon-tag">قريباً</span>
+        <svg class="social-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Google
+      </button>
+      <button class="social-btn" onclick="socialNotReady(this)">
+        <span class="soon-tag">قريباً</span>
+        <svg class="social-icon" viewBox="0 0 24 24"><path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Facebook
+      </button>
+    </div>
+    <div class="social-divider"><span>أو أدخل بياناتك يدوياً</span></div>
+    <label class="f-label">الاسم</label>
+    <input class="f-input" type="text" id="userName" placeholder="اكتب اسمك هنا..."/>
+    <label class="f-label">العمر</label>
+    <input class="f-input" type="number" id="userAge" placeholder="عمرك بالسنوات" min="13" max="90"/>
+    <label class="f-label">الجنس</label>
+    <div class="gender-group">
+      <button class="gender-btn" onclick="selGender('ذكر',this)">♂ ذكر</button>
+      <button class="gender-btn" onclick="selGender('أنثى',this)">♀ أنثى</button>
+      <button class="gender-btn" onclick="selGender('غير محدد',this)">— غير محدد</button>
+    </div>
+    <button class="btn-p" style="width:100%" onclick="startIntro()">متابعة ←</button>
+    <button class="back-btn" onclick="showScreen('landing')">→ العودة</button>
+  </div>
+</div>
+
+<div id="intro" class="screen">
+  <div style="max-width:540px;text-align:center">
+    <div style="font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);letter-spacing:.2em;margin-bottom:1rem">نظرة عامة</div>
+    <h2 style="font-size:1.8rem;font-weight:800;margin-bottom:.7rem">ماذا يقيس الاختبار؟</h2>
+    <p style="color:var(--muted);font-size:.92rem;line-height:1.7;margin-bottom:1.5rem">أسئلة بمعايير أكاديمية تعادل اختبارات SAT/GRE/MENSA. الترتيب والأسئلة عشوائية — لا يمكن الغش بحفظ الإجابات. <strong style="color:var(--pl)">لا توجد تلميحات.</strong></p>
+    <div class="sec-chips">
+      <div class="sec-chip"><span>🧠</span>استدلال كمي</div>
+      <div class="sec-chip"><span>🔤</span>ذكاء لغوي</div>
+      <div class="sec-chip"><span>📐</span>تفكير مجرد</div>
+      <div class="sec-chip"><span>🧩</span>ذكاء منطقي</div>
+      <div class="sec-chip"><span>♟️</span>تفكير استراتيجي</div>
+      <div class="sec-chip"><span>🎭</span>MBTI (منفصل)</div>
+    </div>
+    <p style="color:var(--muted);font-size:.82rem;margin-bottom:.4rem">⏱ 5 دقائق لكل سؤال — ينتقل تلقائياً</p>
+    <p style="color:var(--muted);font-size:.82rem;margin-bottom:.4rem">❤️ 3 قلوب للرجوع لأسئلة سابقة</p>
+    <p style="color:var(--pl);font-size:.82rem;margin-bottom:1.8rem;font-weight:600">⚠️ MBTI لا يؤثر على درجة ELO — نتيجة منفصلة</p>
+    <button class="btn-p" onclick="startQuiz()">ابدأ الاختبار ←</button>
+  </div>
+</div>
+
+<div id="quiz" class="screen">
+  <div class="qhdr">
+    <div class="sec-badge" id="secBadge">القسم</div>
+    <div class="prog-wrap">
+      <div class="prog-labels"><span id="progTxt">السؤال 1 من 100</span><span id="progPct">0%</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+    <div class="hdr-right">
+      <button class="back-q-btn" id="backQBtn" onclick="goBackQ()" disabled>← رجوع</button>
+      <div class="hearts-wrap">
+        <span class="heart" id="h1">❤️</span>
+        <span class="heart" id="h2">❤️</span>
+        <span class="heart" id="h3">❤️</span>
+      </div>
+      <div class="timer-circ">
+        <svg viewBox="0 0 52 52">
+          <defs><linearGradient id="tg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#7c3aed"/><stop offset="100%" style="stop-color:#a855f7"/></linearGradient></defs>
+          <circle class="t-track" cx="26" cy="26" r="22"/>
+          <circle class="t-arc" id="tArc" cx="26" cy="26" r="22" stroke="url(#tg)"/>
+        </svg>
+        <div class="t-num" id="tNum">05:00</div>
+      </div>
+    </div>
+  </div>
+  <div class="quiz-body">
+    <div class="q-num" id="qNum">سؤال 01 / 100</div>
+    <div class="q-card">
+      <div class="q-tag" id="qTag"></div>
+      <div class="q-row">
+        <div class="q-text" id="qText"></div>
+        <div class="q-thumb" id="qThumb" style="display:none" onclick="openLbox()"></div>
+      </div>
+    </div>
+    <div class="opts" id="opts"></div>
+    <button class="next-btn" onclick="nextQ()">التالي ←</button>
+  </div>
+</div>
+
+<div class="lbox" id="lbox" onclick="closeLbox()">
+  <div class="lbox-inner" onclick="event.stopPropagation()">
+    <button class="lbox-close" onclick="closeLbox()">✕</button>
+    <div class="lbox-svg" id="lboxSvg"></div>
+    <div class="lbox-cap" id="lboxCap"></div>
+  </div>
+</div>
+
+<div class="sec-trans" id="secTrans">
+  <div class="sec-trans-icon" id="transIcon">🧠</div>
+  <div class="sec-trans-title" id="transTitle">انتهى القسم</div>
+  <div class="sec-trans-sub" id="transSub">يبدأ القسم التالي</div>
+</div>
+
+<div id="results" class="screen">
+  <div class="res-inner">
+    <div class="res-hdr"><h2>نتائج اختبار NEXIQ</h2><div class="res-name" id="resName"></div></div>
+    <div id="personalityProfile"></div>
+    <div class="elo-sec">
+      <div class="elo-wrap">
+        <svg class="elo-svg" viewBox="0 0 240 240">
+          <defs><linearGradient id="eloG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#7c3aed"/><stop offset="50%" style="stop-color:#a855f7"/><stop offset="100%" style="stop-color:#06b6d4"/></linearGradient></defs>
+          <path class="elo-track" d="M 42 198 A 88 88 0 1 1 198 198" fill="none"/>
+          <path class="elo-arc" id="eloArc" d="M 42 198 A 88 88 0 1 1 198 198" fill="none"/>
+        </svg>
+        <div class="elo-ctr"><div class="elo-num" id="eloNum">0</div><div class="elo-lbl" id="eloLbl">—</div></div>
+      </div>
+      <div class="elo-tier"><div class="elo-tier-name" id="eloTName"></div><div class="elo-tier-desc" id="eloTDesc"></div></div>
+    </div>
+    <div class="elo-compare"><div class="elo-compare-title">موقعك على سلّم ELO — مقارنة بمستويات الشطرنج</div><div class="elo-ladder" id="eloLadder"></div></div>
+    <div class="sec-results" id="secRes"></div>
+    <div class="dgrid" id="dgrid"></div>
+    <div class="mbti-card"><div class="mbti-type" id="mbtiType"></div><div class="mbti-info"><h3 id="mbtiName"></h3><p id="mbtiDesc"></p></div></div>
+    <div class="traits-sec"><div class="traits-title">أبعاد الشخصية MBTI (لا تؤثر على ELO)</div><div id="trRows"></div></div>
+    <button class="restart" onclick="restart()">↺ إعادة الاختبار</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// QUESTION BANK — Academic caliber
+// Sections: 0=Quantitative, 1=Verbal, 2=Abstract, 3=Logical, 4=Strategic
+// MBTI section: 5 (does NOT affect ELO score)
+// Each section: 20 questions with difficulty tags: e=easy, m=medium, h=hard
+// NO hints — anti-cheating
+// ══════════════════════════════════════════
+const QDB = [
+// ══ SECTION 0: استدلال كمي وحسابي ══
+// سهل (e): مسائل يومية مباشرة
+// متوسط (m): تفكير خطوتين
+// صعب (h): تفكير متعدد الخطوات أو خداع الحدس
+[
+{t:"كمي",d:"e",q:"اشترى أحمد 3 كتب بـ 45 ريال. ما سعر الكتاب الواحد؟",o:["12 ر","13 ر","15 ر","18 ر"],c:2,v:null,sc:{iq:2,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"e",q:"رقم زوجي أكبر من 14 وأصغر من 18. ما هو؟",o:["14","15","16","17"],c:2,v:null,sc:{iq:2,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"e",q:"ما ناتج 15% من 200؟",o:["20","25","30","35"],c:2,v:null,sc:{iq:2,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"e",q:"صندوق يحتوي 24 برتقالة. وُزّعت بالتساوي على 6 أشخاص. كم نصيب كل شخص؟",o:["3","4","5","6"],c:1,v:null,sc:{iq:2,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"m",q:"سيارة تقطع 300 كم في 4 ساعات. كم تقطع في 6 ساعات بنفس السرعة؟",o:["400 كم","420 كم","450 كم","480 كم"],c:2,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"m",q:"متوسط أعمار 4 أشقاء هو 12 سنة. أكبرهم 15 سنة. ما متوسط أعمار الثلاثة الباقين؟",o:["10","11","11.5","12"],c:1,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"m",q:"بائع يشتري قميصاً بـ 80 ريالاً ويبيعه بربح 25%. ما سعر البيع؟",o:["95 ر","100 ر","105 ر","110 ر"],c:1,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"m",q:"حوض يملأه صنبور A في 6 ساعات وB في 3 ساعات. معاً كم يحتاجان لملئه؟",o:["2 ساعة","2.5 ساعة","3 ساعة","4 ساعة"],c:0,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"m",q:"متتالية: 3، 6، 12، 24، ___",o:["36","42","48","50"],c:2,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"m",q:"في امتحان من 50 سؤالاً، أجاب طالب على 80% منها صح. كم سؤالاً أجاب خطأ أو تركه؟",o:["8","10","12","15"],c:1,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"m",q:"رقم تضاعف ثلاث مرات ليصبح 216. ما الرقم الأصلي؟",o:["24","27","36","72"],c:1,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"m",q:"مربع ومثلث محيطهما متساوٍ. ضلع المربع 12 سم. ما طول ضلع المثلث المتساوي الأضلاع؟",o:["12 سم","14 سم","16 سم","18 سم"],c:2,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"h",q:"تضاعف سعر سهم مرتين ثم انخفض 50%. هل الآن أعلى أم أقل من سعره الأصلي؟",o:["أعلى بـ 100%","أعلى بـ 50%","نفس السعر تماماً","أقل من الأصل"],c:2,v:null,sc:{iq:5,eq:0,str:1,phy:0,men:1}},
+{t:"كمي",d:"h",q:"قطعة أرض مستطيلة طولها ضعف عرضها. زاد الطول 10% وانخفض العرض 10%. ماذا حصل للمساحة؟",o:["زادت 1%","نقصت 1%","بقيت نفسها","زادت 2%"],c:1,v:null,sc:{iq:5,eq:0,str:0,phy:0,men:1}},
+{t:"كمي",d:"h",q:"أب عمره ضعف ابنه. قبل 5 سنوات كان عمره 3 أمثاله. كم عمر الابن الآن؟",o:["8","10","12","15"],c:1,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"h",q:"مجموع الأعداد الفردية من 1 إلى 19 = ؟",o:["81","90","100","110"],c:2,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"h",q:"احتمال ظهور صورة مرتين عند رمي عملة مرتين = ؟",o:["1/2","1/3","1/4","1/5"],c:2,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"h",q:"أسرع طريقة لحساب: 17 × 23 ذهنياً؟",o:["(20-3)(20+3)=400-9=391","(17)(20)+(17)(3)=340+51=391","كلاهما صحيح","كلاهما خطأ"],c:2,v:null,sc:{iq:4,eq:0,str:1,phy:0,men:1}},
+{t:"كمي",d:"h",q:"عمال 10 ينجزون مشروعاً في 12 يوماً. إذا انسحب عاملان بعد 4 أيام، كم يوماً إضافية يحتاجها الباقون؟",o:["8","10","11","12"],c:1,v:null,sc:{iq:5,eq:0,str:0,phy:0,men:0}},
+{t:"كمي",d:"h",q:"متتالية: 1، 4، 9، 16، 25. ما مجموع الحدود من 1 إلى 5؟",o:["50","55","60","65"],c:1,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}}
+],
+// ══ SECTION 1: ذكاء لغوي واستدلال ══
+[
+{t:"لغوي",d:"e",q:"أكمل التناظر: طبيب : مريض = معلم : ؟",o:["مدرسة","طالب","علم","كتاب"],c:1,v:null,sc:{iq:2,eq:0,str:0,phy:0,men:0}},
+{t:"لغوي",d:"e",q:"أي الكلمات لا تنتمي للمجموعة؟ (مطرقة، مسمار، مفك، شاكوش)",o:["مطرقة","مسمار","مفك","شاكوش"],c:1,v:null,sc:{iq:2,eq:0,str:0,phy:0,men:0}},
+{t:"لغوي",d:"e",q:"أكمل: ساعة : وقت = ميزان : ؟",o:["ذهب","وزن","مال","تجارة"],c:1,v:null,sc:{iq:2,eq:0,str:0,phy:0,men:0}},
+{t:"لغوي",d:"m",q:"قاعدة الحروف: AB، DC، FE، HG، ___",o:["IJ","JI","KL","LK"],c:1,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"لغوي",d:"m",q:"أيٌّ من هذه الجمل يقابل معنى: 'من حفر حفرة لأخيه وقع فيها'؟",o:["المكر السيئ بأهله يحيق","الصبر مفتاح الفرج","العجلة من الشيطان","الحذر لا يمنع القدر"],c:0,v:null,sc:{iq:3,eq:1,str:0,phy:0,men:1}},
+{t:"لغوي",d:"m",q:"جميع الكلاب ثدييات. بعض الثدييات تعيش في البحر. ما الاستنتاج الصحيح؟",o:["بعض الكلاب تعيش في البحر","جميع الكلاب تعيش في البحر","لا يمكن الجزم بأي علاقة بين الكلاب والبحر","الكلاب لا تعيش في البحر"],c:2,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:1}},
+{t:"لغوي",d:"m",q:"الكلمة الغريبة في: (سرّة، بؤرة، مركز، هامش، قلب)",o:["سرّة","بؤرة","مركز","هامش"],c:3,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:1}},
+{t:"لغوي",d:"m",q:"شخص يقول: 'أنا أكذب دائماً'. هل يصدق؟",o:["نعم","لا","أحياناً","السؤال تناقض لا جواب له"],c:3,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:2}},
+{t:"لغوي",d:"m",q:"أكمل التناظر: موسيقى : أذن = رسم : ؟",o:["ألوان","فرشاة","عين","يد"],c:2,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"لغوي",d:"m",q:"كل A هو B. لا B هو C. إذن...",o:["كل A هو C","لا A هو C","بعض A هو C","لا يمكن الاستنتاج"],c:1,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:1}},
+{t:"لغوي",d:"h",q:"A أسرع من B. B أسرع من C. C أبطأ من D. D أبطأ من B. من الأبطأ على الإطلاق؟",o:["A","B","C","D"],c:2,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:1}},
+{t:"لغوي",d:"h",q:"أيٌّ من التالي يمثّل مغالطة 'كل الناس يفعلونه':","q":"الجميع يستخدم هذا التطبيق إذن هو آمن — هذا مثال على مغالطة:",o:["سلطة الخبير","الاستئناس بالكثرة","الرجل القشة","منحدر الزلق"],c:1,v:null,sc:{iq:4,eq:0,str:1,phy:0,men:2}},
+{t:"لغوي",d:"h",q:"ما العلاقة بين التعاطف والشفقة؟",o:["مترادفان تماماً","التعاطف: تشارك الشعور. الشفقة: تلاحظه من بُعد","الشفقة أعمق وأصدق","التعاطف مشاعر والشفقة أفعال"],c:1,v:null,sc:{iq:3,eq:4,str:0,phy:0,men:1}},
+{t:"لغوي",d:"h",q:"متتالية الحروف: Z، X، V، T، ___",o:["S","R","P","Q"],c:1,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"لغوي",d:"h",q:"إذا كانت بعض الورود أحمر، وكل الأحمر جميل — ما الذي يمكن استنتاجه بيقين؟",o:["كل الورود جميلة","بعض الورود جميلة","لا شيء محدد عن الورود","كل الجميل ورود"],c:1,v:null,sc:{iq:5,eq:0,str:0,phy:0,men:1}},
+{t:"لغوي",d:"h",q:"أكمل التناظر: هيكل : عظام = برنامج : ؟",o:["شاشة","شيفرة","مستخدم","إنترنت"],c:1,v:null,sc:{iq:4,eq:0,str:1,phy:0,men:1}},
+{t:"لغوي",d:"h",q:"5 أشخاص في صف: سعد أمام خالد. خالد خلف نورة. نورة أمام منى. منى خلف علي. من في المقدمة؟",o:["سعد","نورة","علي","خالد"],c:0,v:null,sc:{iq:5,eq:0,str:0,phy:0,men:0}},
+{t:"لغوي",d:"h",q:"ما معنى 'خارج الصندوق' (Thinking outside the box)؟",o:["التفكير خارج المكتب","إيجاد حلول غير تقليدية بتجاوز القيود المفترضة","رفض كل القواعد","الإبداع العشوائي"],c:1,v:null,sc:{iq:3,eq:0,str:1,phy:0,men:1}},
+{t:"لغوي",d:"h",q:"ما الغريب: (استنتاج، استنباط، استنشاق، استخلاص)؟",o:["استنتاج","استنباط","استنشاق","استخلاص"],c:2,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"لغوي",d:"h",q:"ثلاثة أشخاص: أول يصدق دائماً، ثانٍ يكذب دائماً، ثالث يتبادل. قال أحدهم: 'الثاني كاذب'. من قاله؟",o:["الأول فقط","الثاني فقط","الثالث فقط","الأول أو الثالث"],c:3,v:null,sc:{iq:5,eq:0,str:0,phy:0,men:1}}
+],
+// ══ SECTION 2: تفكير مجرد ومكاني ══
+[
+{t:"مجرد",d:"e",q:"متتالية: 2، 4، 8، 16، ___",o:["24","28","32","36"],c:2,v:null,sc:{iq:2,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"e",q:"كم مثلثاً في هذا الشكل: مثلث كبير مقسّم بخط إلى مثلثين صغيرين؟",o:["2","3","4","5"],c:1,v:"tri_simple",vc:"مثلثان صغيران + المثلث الكبير = 3 مثلثات",sc:{iq:2,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"e",q:"أي شكل لا ينتمي للمجموعة؟ (مربع، مستطيل، معين، دائرة)",o:["مربع","مستطيل","معين","دائرة"],c:3,v:null,sc:{iq:2,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"m",q:"متتالية: 1، 1، 2، 3، 5، 8، 13، ___",o:["18","20","21","24"],c:2,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"m",q:"عدد وجوه المكعب هو 6. كم ضلعاً له؟",o:["8","10","12","16"],c:2,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"m",q:"متتالية: 2، 3، 5، 7، 11، ___",o:["13","14","15","16"],c:0,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"m",q:"مصفوفة 3×3: الصف الأول (◯◯◼)، الصف الثاني (◯◼◯)، الصف الثالث (؟)",o:["◯◯◯","◼◯◯","◯◼◼","◼◼◯"],c:1,v:"matrix3x3",vc:"المربع الأسود يتحرك موضعاً إلى اليسار في كل صف. في الصف الثالث يكون في الموضع الأول.",sc:{iq:4,eq:0,str:0,phy:0,men:1}},
+{t:"مجرد",d:"m",q:"متتالية: A1، C3، E5، G7، ___",o:["H8","I9","J10","K11"],c:1,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"m",q:"نمط: ◼◻◻ / ◻◼◻ / ◻◻◼ / ___",o:["◼◻◻","◻◼◻","◻◻◼","◼◼◼"],c:0,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"m",q:"في مكعب 3×3×3: كم مكعباً صغيراً لا يُرى من الخارج؟",o:["1","4","8","9"],c:0,v:null,sc:{iq:4,eq:0,str:0,phy:1,men:0}},
+{t:"مجرد",d:"h",q:"متتالية: 3، 8، 15، 24، 35، ___",o:["46","48","50","52"],c:1,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"h",q:"إذا طوّيت ورقة مربعة 7 مرات متتالية من المنتصف، كم طبقة تصبح؟",o:["64","128","256","512"],c:1,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:1}},
+{t:"مجرد",d:"h",q:"كم مثلثاً في مثلث كبير مقسّم بخطين متوازيين للقاعدة؟",o:["3","4","6","9"],c:2,v:"tri_divided",vc:"عدّ المثلثات الصغيرة (3) + المتوسطة (2) + الكبير (1) = 6",sc:{iq:5,eq:0,str:0,phy:0,men:1}},
+{t:"مجرد",d:"h",q:"رقعة شطرنج 8×8: كم مربعاً من كل الأحجام؟",o:["64","100","168","204"],c:3,v:null,sc:{iq:5,eq:0,str:1,phy:0,men:0}},
+{t:"مجرد",d:"h",q:"متتالية: 1، 3، 6، 10، 15، ___",o:["18","20","21","24"],c:2,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"h",q:"إذا قلبت الساعة 6:30 رأساً على عقب، ما الوقت الذي ستراه تقريباً؟",o:["6:30","9:00","12:00","لا يمكن معرفته"],c:1,v:"clock",vc:"الساعة 6:30 مقلوبة 180°: العقرب الطويل يشير يميناً، الأرقام معكوسة. النتيجة ≈ 9:00",sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"h",q:"ما العدد الذي يساوي مكعبه ناقص مضاعفه؟ (x³ = 3x)",o:["√2","√3","2","3"],c:1,v:null,sc:{iq:5,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"h",q:"متتالية: 1، 2، 6، 24، 120، ___",o:["240","360","600","720"],c:3,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"h",q:"شكل له 8 وجوه مثلثية متماثلة يُسمى:",o:["رباعي الوجوه","ثماني الوجوه (Octahedron)","سداسي الوجوه","عشري الوجوه"],c:1,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"مجرد",d:"h",q:"الفرق بين الحد التاسع والعاشر في متتالية فيبوناتشي (1,1,2,3,5,8,13,21,34,55) = ؟",o:["13","21","34","55"],c:2,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}}
+],
+// ══ SECTION 3: تفكير منطقي وحل مشكلات ══
+[
+{t:"منطقي",d:"e",q:"لديك 8 كرات متطابقة، واحدة أثقل. باستخدام ميزان كفتين مرتين فقط — كيف تجد الثقيلة؟",o:["4+4 ثم 2+2","3+3 وتترك 2، ثم 1+1","أجرب واحدة بواحدة","2+2+2+2 ثم 1+1"],c:1,v:"balance",vc:"قسّم 8 إلى 3+3+2. إذا تساوت الكفتان فالثقيلة في الـ2. إذا مالت، قسّم المائلة 1+1.",sc:{iq:4,eq:0,str:1,phy:0,men:1}},
+{t:"منطقي",d:"e",q:"غرفة بها 3 مصابيح وخارجها 3 مفاتيح. تدخل مرة واحدة فقط — كيف تعرف أيها لأيها؟",o:["شغّل مفتاحاً واحداً وادخل","شغّل اثنين وأطفئ واحداً ثم ادخل: المضيء، الدافئ، البارد","شغّل الثلاثة وادخل","ألقِ عملة"],c:1,v:null,sc:{iq:4,eq:0,str:2,phy:0,men:1}},
+{t:"منطقي",d:"e",q:"في سباق تجاوزت الشخص الثاني — ما ترتيبك الآن؟",o:["الأول","الثاني","الثالث","يعتمد على العدد الكلي"],c:1,v:null,sc:{iq:3,eq:0,str:0,phy:0,men:0}},
+{t:"منطقي",d:"m",q:"كم مرة يتقاطع عقربا الساعة في 12 ساعة؟",o:["10","11","12","13"],c:1,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"منطقي",d:"m",q:"مدينتان تبعدان 120 كم. سيارتان تنطلقان معاً بسرعتي 40 و60 كم/ساعة. طائر يطير بينهما بسرعة 100 كم/ساعة. كم يقطع قبل التلاقي؟",o:["80 كم","100 كم","120 كم","140 كم"],c:1,v:null,sc:{iq:5,eq:0,str:0,phy:0,men:1}},
+{t:"منطقي",d:"m",q:"لعبة Nim: 21 عود، كل لاعب يأخذ 1-3 أعواد، من يأخذ الأخير يخسر. ابدأ أنت — ماذا تأخذ لتضمن الفوز؟",o:["1 عود","2 عود","3 أعواد","الأمر عشوائي"],c:0,v:"nim",vc:"ابدأ بـ1 يبقى 20 (مضاعف 4). مهما أخذ خصمك x، أنت تأخذ 4-x. يضمن الفوز.",sc:{iq:5,eq:0,str:3,phy:0,men:1}},
+{t:"منطقي",d:"m",q:"تسافر A→B بسرعة 80 كم/ساعة وتعود بسرعة 120 كم/ساعة. ما متوسط سرعتك الحقيقي؟",o:["100 كم/ساعة","96 كم/ساعة","90 كم/ساعة","88 كم/ساعة"],c:1,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:1}},
+{t:"منطقي",d:"m",q:"بدأت بـ 100 ريال: اشتريت بـ70، بعت بـ80، اشتريت بـ90، بعت بـ100. كم ربحت؟",o:["10 ريال","20 ريال","تعادل","خسرت 10"],c:1,v:null,sc:{iq:4,eq:0,str:1,phy:0,men:0}},
+{t:"منطقي",d:"m",q:"ثلاثة أصدقاء عمرهم مجتمعاً 48 سنة. A أكبر من B بسنتين وB أكبر من C بسنتين. كم عمر A؟",o:["14","16","18","20"],c:2,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"منطقي",d:"m",q:"الحصان في الشطرنج يتحرك على شكل L. من A1 إلى B3 — كم حركة بالحد الأدنى؟",o:["1","2","3","4"],c:0,v:"chess_small",vc:"الحصان من A1 يصل B3 مباشرة بحركة L واحدة (يمين 1 + أعلى 2).",sc:{iq:3,eq:0,str:2,phy:0,men:0}},
+{t:"منطقي",d:"h",q:"مزارع لديه دجاج وأرانب. يعدّ 20 رأساً و56 ساقاً. كم أرنباً لديه؟",o:["6","8","10","12"],c:1,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:1}},
+{t:"منطقي",d:"h",q:"حوض يملأه صنبور A في 4 ساعات وB في 6 ساعات. يفرغه صنبور C في 12 ساعة. الثلاثة معاً — كم ساعة لملء الحوض؟",o:["2","3","4","5"],c:1,v:null,sc:{iq:5,eq:0,str:0,phy:0,men:0}},
+{t:"منطقي",d:"h",q:"5 طلاب يتبادلون المصافحة مرة واحدة بينهم. كم مصافحة في المجموع؟",o:["8","10","12","15"],c:1,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"منطقي",d:"h",q:"كيف تقسّم كعكة دائرية بـ 3 تقطيعات فقط لتحصل على أكبر عدد قطع؟",o:["5 قطع","6 قطع","7 قطع","8 قطع"],c:2,v:null,sc:{iq:5,eq:0,str:1,phy:0,men:1}},
+{t:"منطقي",d:"h",q:"ما الفرق الجوهري بين الاستراتيجية والتكتيك؟",o:["لا فرق حقيقي","الاستراتيجية هدف بعيد المدى والتكتيك خطوة تنفيذية قريبة","الاستراتيجية للحروب والتكتيك للأعمال","التكتيك أهم في عصرنا"],c:1,v:null,sc:{iq:3,eq:0,str:4,phy:0,men:1}},
+{t:"منطقي",d:"h",q:"في معضلة السجين المتكررة، أكثر الاستراتيجيات نجاحاً إجمالاً هي:",o:["الخيانة دائماً","التعاون دائماً","ابدأ بالتعاون ثم قابل بالمثل (Tit-for-Tat)","تبديل عشوائي"],c:2,v:"prisoners",vc:"بحوث Axelrod أثبتت: التعاون أولاً ثم انعكاس ما يفعله الآخر — الأمثل في اللعبة المتكررة.",sc:{iq:4,eq:1,str:3,phy:0,men:1}},
+{t:"منطقي",d:"h",q:"اشترى 5 أقلام و3 كراسات بـ 85 ريالاً. القلم بنصف سعر الكراسة. ما سعر القلم؟",o:["5 ر","6 ر","7 ر","10 ر"],c:3,v:null,sc:{iq:4,eq:0,str:0,phy:0,men:0}},
+{t:"منطقي",d:"h",q:"ما الذي يصف 'التحيز التأكيدي' (Confirmation Bias)؟",o:["الثقة المفرطة في المعلومات الحديثة","الميل للبحث عن معلومات تؤكد ما نؤمن به مسبقاً","خطأ في التفكير الإحصائي","تجاهل المعلومات السلبية"],c:1,v:null,sc:{iq:4,eq:0,str:2,phy:0,men:2}},
+{t:"منطقي",d:"h",q:"مبدأ 80/20 (باريتو) يعني:",o:["20% جهد يُنتج 80% نتائج","يجب إعطاء 80% للعمل و20% للراحة","20% من الناس يمتلكون 80% الثروة فقط","كلاهما أ و ج"],c:3,v:null,sc:{iq:4,eq:0,str:3,phy:0,men:1}},
+{t:"منطقي",d:"h",q:"الفرق بين 'الفعالية' (Effectiveness) و'الكفاءة' (Efficiency):",o:["لا فرق","الفعالية: تحقيق الهدف الصحيح. الكفاءة: تحقيق الهدف بأفضل طريقة","الكفاءة أهم دائماً","الفعالية للأفراد والكفاءة للمؤسسات"],c:1,v:null,sc:{iq:3,eq:0,str:3,phy:0,men:1}}
+],
+// ══ SECTION 4: ذكاء عاطفي وشخصي ══
+[
+{t:"عاطفي",d:"e",q:"صديقك يخبرك بخبر محزن عبر الرسائل. ما أول ردّ فعلك؟",o:["أرسل رموز تعبيرية حزينة","أتصل فوراً","أكتب رسالة طويلة بحلول","أقرأ مرتين ثم أسأله: 'كيف تشعر الآن؟'"],c:3,v:null,sc:{iq:0,eq:5,str:0,phy:0,men:0}},
+{t:"عاطفي",d:"e",q:"زميلك شارد الذهن ومنعزل منذ أيام. ما أنسب تصرف؟",o:["أتركه — شؤونه الخاصة","أسأله مباشرة: 'ما المشكلة؟'","أبدأ بحديث عادي وأُتيح له فرصة التحدث","أخبر المدير بأن أداءه تراجع"],c:2,v:null,sc:{iq:0,eq:5,str:0,phy:0,men:1}},
+{t:"عاطفي",d:"e",q:"تشعر بغضب شديد من موقف في العمل. ما أفضل خطوة؟",o:["أعبّر عن غضبي فوراً","أكتم الغضب وأكمل","أنتظر حتى يهدأ غضبي ثم أتحدث بوضوح","أشكو لزملائي"],c:2,v:null,sc:{iq:0,eq:5,str:1,phy:0,men:1}},
+{t:"عاطفي",d:"m",q:"شخص يقول 'أنا بخير' لكن لغة جسده تقول عكس ذلك. ما أنسب رد؟",o:["أصدق ما يقوله","أقول له: 'أنت تكذب'","أقول: 'أسمع كلامك، لكنك تبدو تحت ضغط — هل تريد التحدث؟'","أتجاهل وأكمل حديثي"],c:2,v:null,sc:{iq:0,eq:5,str:0,phy:0,men:1}},
+{t:"عاطفي",d:"m",q:"تعرّضت لفشل شخصي مؤلم. ما الذي يساعد على التعافي الحقيقي؟",o:["الانشغال الفوري بمشاريع جديدة","التحدث عنه مع كل شخص","منح النفس وقتاً للمعالجة ثم تحليل ما حدث بهدوء","التأكيد المستمر 'كل شيء سيكون بخير'"],c:2,v:null,sc:{iq:0,eq:5,str:0,phy:0,men:2}},
+{t:"عاطفي",d:"m",q:"شخص يتهمك ظلماً أمام الآخرين. ما ردّك الأمثل؟",o:["أرد بغضب فوري","أصمت وأشعر بالانكسار","أقول هادئاً: 'هذا غير دقيق، نتحدث لاحقاً خاصة'","أبتسم وأتجاهل"],c:2,v:null,sc:{iq:0,eq:5,str:2,phy:0,men:1}},
+{t:"عاطفي",d:"m",q:"الفرق بين التعاطف (Empathy) والشفقة (Sympathy):",o:["لا فرق حقيقي","التعاطف يشارك الشعور. الشفقة تلاحظه من بُعد","الشفقة أعمق وأصدق","التعاطف للأصدقاء والشفقة للغرباء"],c:1,v:null,sc:{iq:1,eq:5,str:0,phy:0,men:1}},
+{t:"عاطفي",d:"m",q:"صديقك يتخذ قراراً ستندم عليه. ما أنسب تصرف؟",o:["أصمت لأن القرار قراره","أقول رأيي بوضوح وأقبل قراره بعدها","أحاول ثنيه بكل الطرق","أنتظر حتى يفشل ثم أساعده"],c:1,v:null,sc:{iq:0,eq:5,str:1,phy:0,men:0}},
+{t:"عاطفي",d:"m",q:"ما السلوك الذي يُدمّر الثقة بشكل أصعب للإصلاح؟",o:["الكذب مرة واحدة في موقف صعب","التناقض المستمر بين الأقوال والأفعال","الانتقاد أمام الآخرين","التأخر عن المواعيد"],c:1,v:null,sc:{iq:0,eq:5,str:0,phy:0,men:1}},
+{t:"عاطفي",d:"m",q:"ما علامة النضج العاطفي الحقيقية؟",o:["عدم الشعور بالغضب أو الحزن","الشعور بالمشاعر وتنظيمها دون إسقاطها على الآخرين","إخفاء المشاعر دائماً","التعبير عن كل شعور فوراً"],c:1,v:null,sc:{iq:0,eq:5,str:0,phy:0,men:2}},
+{t:"عاطفي",d:"h",q:"أحد أفراد عائلتك يمر بأزمة. كيف توازن بين الاهتمام وصحتك النفسية؟",o:["أضع نفسي جانباً تماماً","أحدد حدوداً وأطلب مساعدة الآخرين","أبتعد مؤقتاً حتى لا أنهار","أتظاهر بأن كل شيء طبيعي"],c:1,v:null,sc:{iq:0,eq:5,str:1,phy:0,men:1}},
+{t:"عاطفي",d:"h",q:"تشعر بقلق قبل موقف مهم. ما أفضل جملة داخلية تقولها لنفسك؟",o:["'لا تقلق، كل شيء سيكون رائعاً'","'هذا القلق يعني أنني أهتم — سأستخدمه طاقة'","'توقف عن التفكير في الأمر'","'الأسوأ الذي يمكن أن يحدث هو...'"],c:1,v:"anxiety_reframe",vc:"إعادة التأطير المعرفي: القلق ليس عدوك — هو طاقة تنتظر التوجيه.",sc:{iq:0,eq:5,str:1,phy:0,men:2}},
+{t:"عاطفي",d:"h",q:"ما الفرق بين الحزم (Assertiveness) والعدوانية؟",o:["لا فرق","الحزم يُعبّر عن الحاجة دون إيذاء الآخر. العدوانية تتجاهل حقوقه","الحزم ضعف والعدوانية قوة","الحزم للعمل والعدوانية للحياة الشخصية"],c:1,v:null,sc:{iq:0,eq:5,str:2,phy:0,men:1}},
+{t:"عاطفي",d:"h",q:"شخص يعتذر لكنك تشعر أن الاعتذار غير حقيقي. ما الأصح؟",o:["أتقبّل الاعتذار وأمضي","أرفض الاعتذار وأقطع العلاقة","أُعبّر أن الاعتذار الحقيقي يحتاج تغييراً في السلوك","أتجاهل كأنه لم يحدث"],c:2,v:null,sc:{iq:0,eq:5,str:1,phy:0,men:1}},
+{t:"عاطفي",d:"h",q:"في خلاف مع شريكك — ما السلوك الأكثر ضرراً للعلاقة على المدى البعيد؟",o:["رفع الصوت أحياناً","الصمت والانسحاب العاطفي المتكرر","قول رأيك بصراحة","طلب وقت للتفكير قبل الرد"],c:1,v:null,sc:{iq:0,eq:5,str:0,phy:0,men:1}},
+{t:"عاطفي",d:"h",q:"لماذا يصعب قبول النقد حتى عندما يكون صحيحاً؟",o:["الناس حساسون جداً في عصرنا","الدماغ يُعالج النقد كتهديد للهوية لا للسلوك","الناقد دائماً لديه أجندة","الانتقاد يستلزم دليلاً"],c:1,v:null,sc:{iq:1,eq:5,str:0,phy:0,men:2}},
+{t:"عاطفي",d:"h",q:"كيف تصف شخصاً يستطيع الشعور بمشاعره الصعبة دون أن يُسيطر عليها؟",o:["باردًا عاطفياً","ناضجاً عاطفياً","متحجّراً","ضعيفاً"],c:1,v:null,sc:{iq:0,eq:5,str:0,phy:0,men:2}},
+{t:"عاطفي",d:"h",q:"ما الذي يصف 'الذكاء العاطفي' (EQ) بشكل أدق؟",o:["القدرة على التحكم في مشاعر الآخرين","إخفاء مشاعرك في المواقف الصعبة","إدراك مشاعرك ومشاعر الآخرين وإدارتها بفعالية","أن تكون دائماً هادئاً ومبتسماً"],c:2,v:null,sc:{iq:1,eq:5,str:0,phy:0,men:2}},
+{t:"عاطفي",d:"h",q:"شخص شارد الذهن في اجتماع. ما أذكى طريقة لإعادة تفاعله؟",o:["أناديه باسمه بصوت عالٍ","أُوجّه له سؤالاً مباشراً ومثيراً","أُشير لانشراده أمام الجميع","أتجاهله وأكمل"],c:1,v:null,sc:{iq:1,eq:5,str:2,phy:0,men:1}},
+{t:"عاطفي",d:"h",q:"ما الفرق بين 'الحدود الشخصية' (Boundaries) و'العزلة'؟",o:["لا فرق","الحدود تحمي العلاقة. العزلة تُنهيها","الحدود أنانية والعزلة صحية","العزلة مؤقتة والحدود دائمة"],c:1,v:null,sc:{iq:1,eq:5,str:0,phy:0,men:2}}
+],
+// ══ SECTION 5: MBTI — لا يؤثر على ELO ══
+[
+{t:"MBTI",d:"m",q:"أي وصف يصف طاقتك الاجتماعية بدقة أكبر؟",o:["أستعيد طاقتي بالوحدة والهدوء","أستعيد طاقتي بالناس والتفاعل","يتفاوت بحسب اليوم والحالة","الطاقة لا تتأثر بالبيئة الاجتماعية"],c:-1,v:null,sc:{e:-2,i:2,n:0,s:0,t:0,f:0,j:0,p:0}},
+{t:"MBTI",d:"m",q:"في القرارات المهمة — أيهما يغلب عليك؟",o:["المنطق والتحليل الموضوعي","القيم والعلاقات والأثر الإنساني","مزيج متوازن تقريباً","أتجنب القرارات الكبرى"],c:-1,v:null,sc:{e:0,i:0,n:0,s:0,t:2,f:-2,j:0,p:0}},
+{t:"MBTI",d:"m",q:"عند التخطيط لأسبوعك — كيف تتصرف؟",o:["جدول مفصّل وأتقيّد به","خطوط عامة وأُعدّل حسب الحاجة","تلقائية شبه كاملة","أحتاج من يُذكّرني"],c:-1,v:null,sc:{e:0,i:0,n:0,s:0,t:0,f:0,j:2,p:-2}},
+{t:"MBTI",d:"m",q:"ما أكثر ما يشغلك عند قراءة خبر جديد؟",o:["الحقائق والتفاصيل الدقيقة","الأنماط والتداعيات المستقبلية","التأثير على الناس","من يستفيد ومن يخسر"],c:-1,v:null,sc:{e:0,i:0,n:2,s:-2,t:1,f:-1,j:0,p:1}},
+{t:"MBTI",d:"m",q:"في مجموعة عمل — ما دورك الطبيعي الغالب؟",o:["القائد الذي يوجّه ويحسم","المفكر الذي يطرح الأفكار","المنسّق بين وجهات النظر","المنفّذ الذي يُنجز المهام"],c:-1,v:null,sc:{e:1,i:-1,n:0,s:1,t:1,f:0,j:1,p:0}},
+{t:"MBTI",d:"m",q:"عند مواجهة غموض وعدم يقين — ما شعورك الأغلب؟",o:["قلق — أريد وضوحاً فورياً","فضول — أتحمس للاستكشاف","محايد — أتعامل مع ما أمامي","أكره الغموض وأتجنبه"],c:-1,v:null,sc:{e:0,i:0,n:1,s:-1,t:0,f:0,j:-1,p:1}},
+{t:"MBTI",d:"m",q:"ما الوصف الذي يسعدك أن يُقال عنك؟",o:["موثوق ومنظّم دائماً","مبدع ومليء بالأفكار","دافئ ومهتم بالآخرين","مستقل وصاحب رؤية"],c:-1,v:null,sc:{e:0,i:0,n:1,s:0,t:0,f:1,j:1,p:0}},
+{t:"MBTI",d:"m",q:"وحدك في مكان هادئ ساعة — ماذا تفعل تلقائياً؟",o:["أراقب الناس وأتخيل قصصهم","أقرأ أو أتعلم شيئاً","أتصل أو أراسل أحداً","أفكر وأخطط لأهداف"],c:-1,v:null,sc:{e:-1,i:1,n:1,s:-1,t:0,f:0,j:0,p:1}},
+{t:"MBTI",d:"m",q:"عند خلافك مع شخص تحبه — ما غريزتك الأولى؟",o:["أواجه الموضوع مباشرة الآن","أنسحب وأعالج مشاعري ثم أعود","أبحث عن حل وسط","أتجنب الخلاف وآمل أن يحل وحده"],c:-1,v:null,sc:{e:1,i:-1,n:0,s:0,t:0,f:1,j:0,p:0}},
+{t:"MBTI",d:"m",q:"ما تجده مُجهِداً ولو كان مفيداً؟",o:["التخطيط المفصّل والتنظيم الصارم","المحادثات الاجتماعية الطويلة","التحليل العاطفي المعمّق","الإجراءات الروتينية والمتكررة"],c:-1,v:null,sc:{e:-1,i:1,n:0,s:0,t:0,f:1,j:-1,p:1}},
+{t:"MBTI",d:"m",q:"أيٌّ أقرب لطريقة تعلّمك؟",o:["التعليمات المكتوبة خطوة بخطوة","التجريب المباشر والتعلم من الأخطاء","الاستماع لشخص يشرح بحماس","الفهم النظري قبل التطبيق"],c:-1,v:null,sc:{e:0,i:0,n:1,s:-1,t:1,f:-1,j:0,p:1}},
+{t:"MBTI",d:"m",q:"كيف تصف أسلوبك عند العمل على مشروع كبير؟",o:["أُقسّمه لمهام صغيرة وأُنجز واحدة واحدة","أرى الصورة الكاملة أولاً ثم أبدأ","أبدأ بما يشدّني أكثر","أحتاج ضغط الموعد النهائي لأبدأ"],c:-1,v:null,sc:{e:0,i:0,n:1,s:-1,t:0,f:0,j:1,p:-1}},
+{t:"MBTI",d:"m",q:"ما الذي يجعل أسبوعك ناجحاً في نظرك؟",o:["أنجزت كل المهام في القائمة","تعلّمت أو اكتشفت شيئاً جديداً","أسهمت إيجابياً في حياة شخص ما","تقدّمت نحو هدف بعيد المدى"],c:-1,v:null,sc:{e:0,i:0,n:1,s:0,t:0,f:1,j:1,p:0}},
+{t:"MBTI",d:"m",q:"في موقف ضغط جماعي مفاجئ — ما يصف أسلوبك الغالب؟",o:["أتولى القيادة وأهدئ الجميع","أنسحب وأعالج بمفردي","أتبع من يبدو الأكثر ثقة","أعبّر عن مخاوفي بصراحة"],c:-1,v:null,sc:{e:1,i:-1,n:0,s:1,t:1,f:0,j:1,p:0}},
+{t:"MBTI",d:"m",q:"عند اتخاذ قرار مهم — متى تشعر أنك مستعد؟",o:["عند جمع كافة المعلومات المتاحة","عندما يقول حدسي الداخلي ذلك","بعد مناقشته مع المقرّبين","عند اقتراب الموعد النهائي فقط"],c:-1,v:null,sc:{e:0,i:0,n:0,s:1,t:1,f:0,j:1,p:-1}},
+{t:"MBTI",d:"m",q:"أيٌّ يصف علاقتك بالقواعد والأنظمة بشكل أدق؟",o:["القواعد موجودة لسبب وأتبعها","القواعد إرشادات وليست قوانين صارمة","القواعد تعيق الإبداع وأتجاوزها","أتبع المنطقية منها وأتجاهل غيرها"],c:-1,v:null,sc:{e:0,i:0,n:0,s:0,t:0,f:0,j:2,p:-2}},
+{t:"MBTI",d:"m",q:"أي نوع من العمل يمنحك أكثر رضا؟",o:["عمل منظّم بنتائج واضحة وقابلة للقياس","استكشاف وبحث في مناطق غير مكتشفة","مساعدة الآخرين وبناء العلاقات","عمل مستقل بحرية كاملة"],c:-1,v:null,sc:{e:0,i:0,n:1,s:-1,t:0,f:1,j:1,p:0}},
+{t:"MBTI",d:"m",q:"ما الذي يُعيق تركيزك أكثر؟",o:["الضوضاء والمحيط المادي المشتت","الأفكار الداخلية المتدفقة","المهام الممللة والمتكررة","الضغط الخارجي والمواعيد النهائية"],c:-1,v:null,sc:{e:1,i:-1,n:1,s:-1,t:0,f:0,j:0,p:1}},
+{t:"MBTI",d:"m",q:"كيف تصف حوارك الداخلي (inner monologue)؟",o:["منظّم وخطّي — أفكار تتبع بعضها","فوضوي ومتشعّب — أفكار في كل اتجاه","بالكاد أنتبه له","يشبه حواراً مع شخص آخر داخلي"],c:-1,v:null,sc:{e:0,i:1,n:1,s:0,t:0,f:0,j:0,p:1}},
+{t:"MBTI",d:"m",q:"ما الذي تفضّله في وقت فراغك؟",o:["نشاط اجتماعي مع أصدقاء","نشاط فردي هادئ (قراءة، تأمل)","تعلّم مهارة جديدة","استكشاف مكان أو تجربة جديدة"],c:-1,v:null,sc:{e:1,i:-1,n:1,s:-1,t:0,f:0,j:0,p:1}}
+]
+];
+
+// ── SVGs for visual questions ──
+const SVGS = {
+tri_simple:`<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg"><polygon points="100,15 10,145 190,145" fill="none" stroke="#a855f7" stroke-width="2"/><line x1="10" y1="145" x2="100" y2="15" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,3"/><text x="40" y="100" fill="#6b6b8a" font-size="10" text-anchor="middle">△1</text><text x="150" y="100" fill="#6b6b8a" font-size="10" text-anchor="middle">△2</text><text x="100" y="65" fill="#a855f7" font-size="10" text-anchor="middle">△كبير</text><text x="100" y="155" fill="#6b6b8a" font-size="8" text-anchor="middle">المجموع: 3 مثلثات</text></svg>`,
+tri_divided:`<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg"><polygon points="100,10 10,150 190,150" fill="none" stroke="#a855f7" stroke-width="2"/><line x1="37" y1="103" x2="163" y2="103" stroke="#7c3aed" stroke-width="1.5"/><line x1="55" y1="150" x2="73" y2="103" stroke="#7c3aed" stroke-width="1" opacity=".6"/><line x1="145" y1="150" x2="127" y2="103" stroke="#7c3aed" stroke-width="1" opacity=".6"/><text x="100" y="156" fill="#6b6b8a" font-size="8" text-anchor="middle">6 مثلثات: 3 صغيرة + 2 متوسطة + 1 كبير</text></svg>`,
+clock:`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="80" fill="#0e0e1c" stroke="#4c1d95" stroke-width="3"/><text x="100" y="42" fill="#a855f7" font-size="16" text-anchor="middle" font-weight="bold">12</text><text x="100" y="167" fill="#a855f7" font-size="16" text-anchor="middle" font-weight="bold">6</text><text x="32" y="107" fill="#a855f7" font-size="16" text-anchor="middle" font-weight="bold">9</text><text x="168" y="107" fill="#a855f7" font-size="16" text-anchor="middle" font-weight="bold">3</text><line x1="100" y1="100" x2="100" y2="38" stroke="#c084fc" stroke-width="3" stroke-linecap="round"/><line x1="100" y1="100" x2="148" y2="100" stroke="#7c3aed" stroke-width="4" stroke-linecap="round"/><text x="100" y="186" fill="#6b6b8a" font-size="9" text-anchor="middle">6:30 → مقلوبة ≈ 9:00</text></svg>`,
+matrix3x3:`<svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg"><text x="10" y="18" fill="#6b6b8a" font-size="10" font-family="monospace">صف1: ◯ ◯ ◼</text><text x="10" y="48" fill="#6b6b8a" font-size="10" font-family="monospace">صف2: ◯ ◼ ◯</text><text x="10" y="78" fill="#a855f7" font-size="10" font-family="monospace">صف3: ◼ ◯ ◯  ← الجواب</text><text x="10" y="115" fill="#6b6b8a" font-size="9" font-family="monospace">المربع الأسود يتحرك</text><text x="10" y="130" fill="#6b6b8a" font-size="9" font-family="monospace">خطوة إلى اليسار في كل صف</text></svg>`,
+balance:`<svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg"><rect x="95" y="15" width="10" height="85" fill="#4c1d95" rx="3"/><rect x="35" y="100" width="130" height="7" fill="#6d28d9" rx="4"/><line x1="100" y1="25" x2="50" y2="75" stroke="#a855f7" stroke-width="2"/><line x1="100" y1="25" x2="150" y2="75" stroke="#a855f7" stroke-width="2"/><rect x="24" y="73" width="52" height="12" fill="#7c3aed" rx="4"/><rect x="124" y="73" width="52" height="12" fill="#7c3aed" rx="4"/><circle cx="33" cy="67" r="6" fill="#c084fc"/><circle cx="43" cy="67" r="6" fill="#c084fc"/><circle cx="53" cy="67" r="6" fill="#c084fc"/><circle cx="133" cy="67" r="6" fill="#c084fc"/><circle cx="143" cy="67" r="6" fill="#c084fc"/><circle cx="153" cy="67" r="6" fill="#c084fc"/><text x="50" y="96" fill="#6b6b8a" font-size="8" text-anchor="middle">3</text><text x="150" y="96" fill="#6b6b8a" font-size="8" text-anchor="middle">3</text><text x="100" y="128" fill="#a855f7" font-size="8" text-anchor="middle">قسّم 3+3 واترك 2</text><text x="100" y="142" fill="#6b6b8a" font-size="7" text-anchor="middle">إذا تساوت → الثقيلة في الـ2</text></svg>`,
+nim:`<svg viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="38" width="7" height="28" fill="#10b981" rx="2" stroke="#34d399" stroke-width=".5"/><rect x="17" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="26" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="35" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="44" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="53" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="62" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="71" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="80" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="89" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="98" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="107" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="116" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="125" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="134" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="143" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="152" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="161" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="170" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="179" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><rect x="188" y="38" width="7" height="28" fill="#4c1d95" rx="2" stroke="#6d28d9" stroke-width=".5"/><text x="11" y="82" fill="#10b981" font-size="7">خذ 1</text><text x="100" y="18" fill="#a855f7" font-size="9" text-anchor="middle">21 عود — الأخير يخسر</text><text x="100" y="105" fill="#6b6b8a" font-size="7" text-anchor="middle">من يأخذ العود الأخير يخسر</text></svg>`,
+chess_small:`<svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="8" width="196" height="196" fill="#0e0e1c" rx="2"/><rect x="20" y="10" width="24" height="24" fill="#2a1f4e"/><rect x="44" y="10" width="24" height="24" fill="#13132a"/><rect x="68" y="10" width="24" height="24" fill="#2a1f4e"/><rect x="92" y="10" width="24" height="24" fill="#13132a"/><rect x="116" y="10" width="24" height="24" fill="#2a1f4e"/><rect x="140" y="10" width="24" height="24" fill="#13132a"/><rect x="164" y="10" width="24" height="24" fill="#2a1f4e"/><rect x="188" y="10" width="24" height="24" fill="#13132a"/><rect x="20" y="34" width="24" height="24" fill="#13132a"/><rect x="44" y="34" width="24" height="24" fill="#2a1f4e"/><rect x="68" y="34" width="24" height="24" fill="#13132a"/><rect x="92" y="34" width="24" height="24" fill="#2a1f4e"/><rect x="116" y="34" width="24" height="24" fill="#13132a"/><rect x="140" y="34" width="24" height="24" fill="#2a1f4e"/><rect x="164" y="34" width="24" height="24" fill="#13132a"/><rect x="188" y="34" width="24" height="24" fill="#2a1f4e"/><rect x="20" y="58" width="24" height="24" fill="#2a1f4e"/><rect x="44" y="58" width="24" height="24" fill="#13132a"/><rect x="68" y="58" width="24" height="24" fill="#2a1f4e"/><rect x="92" y="58" width="24" height="24" fill="#13132a"/><rect x="116" y="58" width="24" height="24" fill="#2a1f4e"/><rect x="140" y="58" width="24" height="24" fill="#13132a"/><rect x="164" y="58" width="24" height="24" fill="#2a1f4e"/><rect x="188" y="58" width="24" height="24" fill="#13132a"/><rect x="20" y="82" width="24" height="24" fill="#13132a"/><rect x="44" y="82" width="24" height="24" fill="#2a1f4e"/><rect x="68" y="82" width="24" height="24" fill="#13132a"/><rect x="92" y="82" width="24" height="24" fill="#2a1f4e"/><rect x="116" y="82" width="24" height="24" fill="#13132a"/><rect x="140" y="82" width="24" height="24" fill="#2a1f4e"/><rect x="164" y="82" width="24" height="24" fill="#13132a"/><rect x="188" y="82" width="24" height="24" fill="#2a1f4e"/><rect x="20" y="106" width="24" height="24" fill="#2a1f4e"/><rect x="44" y="106" width="24" height="24" fill="#13132a"/><rect x="68" y="106" width="24" height="24" fill="#2a1f4e"/><rect x="92" y="106" width="24" height="24" fill="#13132a"/><rect x="116" y="106" width="24" height="24" fill="#2a1f4e"/><rect x="140" y="106" width="24" height="24" fill="#13132a"/><rect x="164" y="106" width="24" height="24" fill="#2a1f4e"/><rect x="188" y="106" width="24" height="24" fill="#13132a"/><rect x="20" y="130" width="24" height="24" fill="#13132a"/><rect x="44" y="130" width="24" height="24" fill="#2a1f4e"/><rect x="68" y="130" width="24" height="24" fill="#13132a"/><rect x="92" y="130" width="24" height="24" fill="#2a1f4e"/><rect x="116" y="130" width="24" height="24" fill="#13132a"/><rect x="140" y="130" width="24" height="24" fill="#2a1f4e"/><rect x="164" y="130" width="24" height="24" fill="#13132a"/><rect x="188" y="130" width="24" height="24" fill="#2a1f4e"/><rect x="20" y="154" width="24" height="24" fill="#2a1f4e"/><rect x="44" y="154" width="24" height="24" fill="#13132a"/><rect x="68" y="154" width="24" height="24" fill="#2a1f4e"/><rect x="92" y="154" width="24" height="24" fill="#13132a"/><rect x="116" y="154" width="24" height="24" fill="#2a1f4e"/><rect x="140" y="154" width="24" height="24" fill="#13132a"/><rect x="164" y="154" width="24" height="24" fill="#2a1f4e"/><rect x="188" y="154" width="24" height="24" fill="#13132a"/><rect x="20" y="178" width="24" height="24" fill="#13132a"/><rect x="44" y="178" width="24" height="24" fill="#2a1f4e"/><rect x="68" y="178" width="24" height="24" fill="#13132a"/><rect x="92" y="178" width="24" height="24" fill="#2a1f4e"/><rect x="116" y="178" width="24" height="24" fill="#13132a"/><rect x="140" y="178" width="24" height="24" fill="#2a1f4e"/><rect x="164" y="178" width="24" height="24" fill="#13132a"/><rect x="188" y="178" width="24" height="24" fill="#2a1f4e"/><text x="32" y="210" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">A</text><text x="56" y="210" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">B</text><text x="80" y="210" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">C</text><text x="104" y="210" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">D</text><text x="128" y="210" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">E</text><text x="152" y="210" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">F</text><text x="176" y="210" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">G</text><text x="200" y="210" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">H</text><text x="13" y="26" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">8</text><text x="13" y="50" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">7</text><text x="13" y="74" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">6</text><text x="13" y="98" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">5</text><text x="13" y="122" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">4</text><text x="13" y="146" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">3</text><text x="13" y="170" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">2</text><text x="13" y="194" fill="#6b6b8a" font-size="8" text-anchor="middle" font-family="monospace">1</text><rect x="20" y="178" width="24" height="24" fill="rgba(6,182,212,.5)" stroke="#06b6d4" stroke-width="1.5"/><text x="32" y="194" fill="white" font-size="8" text-anchor="middle" font-family="monospace">A1</text><rect x="44" y="130" width="24" height="24" fill="rgba(16,185,129,.5)" stroke="#10b981" stroke-width="1.5"/><text x="56" y="146" fill="white" font-size="8" text-anchor="middle" font-family="monospace">B3</text><path d="M32,190 L56,190 L56,142" stroke="#a855f7" stroke-width="2" fill="none" stroke-dasharray="3,2"/><circle cx="56" cy="142" r="3" fill="#a855f7"/><text x="110" y="218" fill="#a855f7" font-size="8" text-anchor="middle">حركة الحصان: خطوتان لأعلى + خطوة يميناً</text></svg>`,
+prisoners:`<svg viewBox="0 0 210 160" xmlns="http://www.w3.org/2000/svg"><rect x="60" y="5" width="65" height="22" fill="#1e1e3a" stroke="#4c1d95" stroke-width="1" rx="4"/><text x="92" y="21" fill="#a855f7" font-size="9" text-anchor="middle">لاعب ب</text><rect x="5" y="38" width="48" height="20" fill="#1e1e3a" stroke="#06b6d4" stroke-width="1" rx="4"/><text x="29" y="53" fill="#06b6d4" font-size="8" text-anchor="middle">تعاون</text><rect x="5" y="105" width="48" height="20" fill="#1e1e3a" stroke="#ef4444" stroke-width="1" rx="4"/><text x="29" y="120" fill="#ef4444" font-size="8" text-anchor="middle">خيانة</text><rect x="5" y="68" width="48" height="20" fill="#1e1e3a" stroke="#a855f7" stroke-width="1" rx="4"/><text x="29" y="83" fill="#a855f7" font-size="8" text-anchor="middle">لاعب أ</text><rect x="60" y="38" width="58" height="28" fill="#1e1e3a" stroke="#1e1e3a" stroke-width="1" rx="3"/><text x="89" y="56" fill="#6b6b8a" font-size="9" text-anchor="middle">3,3</text><rect x="126" y="38" width="58" height="28" fill="#1e1e3a" stroke="#1e1e3a" stroke-width="1" rx="3"/><text x="155" y="56" fill="#6b6b8a" font-size="9" text-anchor="middle">0,5</text><rect x="60" y="105" width="58" height="28" fill="#1e1e3a" stroke="#1e1e3a" stroke-width="1" rx="3"/><text x="89" y="123" fill="#6b6b8a" font-size="9" text-anchor="middle">5,0</text><rect x="126" y="105" width="58" height="28" fill="#1e1e3a" stroke="#1e1e3a" stroke-width="1" rx="3"/><text x="155" y="123" fill="#6b6b8a" font-size="9" text-anchor="middle">1,1</text><text x="60" y="150" fill="#6b6b8a" font-size="7">كل خلية: (نتيجة أ، نتيجة ب)</text></svg>`,
+shapes_basic:`<svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg"><polygon points="30,110 60,50 90,110" fill="none" stroke="#a855f7" stroke-width="2"/><rect x="110" y="55" width="55" height="55" fill="none" stroke="#a855f7" stroke-width="2"/><text x="48" y="130" fill="#6b6b8a" font-size="9" text-anchor="middle" font-family="monospace">مثلث</text><text x="137" y="130" fill="#6b6b8a" font-size="9" text-anchor="middle" font-family="monospace">مربع</text></svg>`,
+matrix_pattern:`<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg"><text x="10" y="15" fill="#6b6b8a" font-size="9" font-family="monospace">صف1: ◯◯◼</text><text x="10" y="45" fill="#6b6b8a" font-size="9" font-family="monospace">صف2: ◯◼◯</text><text x="10" y="75" fill="#a855f7" font-size="9" font-family="monospace">صف3: ؟</text><text x="10" y="120" fill="#6b6b8a" font-size="8" font-family="monospace">المربع الأسود يتحرك</text><text x="10" y="135" fill="#6b6b8a" font-size="8" font-family="monospace">خطوة لليسار في كل صف</text></svg>`,
+anxiety_reframe:`<svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+<rect x="10" y="20" width="90" height="60" rx="10" fill="#2a1030" stroke="#ef4444" stroke-width="1.5"/>
+<text x="55" y="45" fill="#ef4444" font-size="10" text-anchor="middle" font-weight="bold">قلق</text>
+<text x="55" y="60" fill="#6b6b8a" font-size="8" text-anchor="middle">طاقة سلبية</text>
+<text x="55" y="73" fill="#6b6b8a" font-size="7" text-anchor="middle">غير موجهة</text>
+<path d="M105,50 L130,50" stroke="#a855f7" stroke-width="2" marker-end="url(#arrowhead)"/>
+<defs><marker id="arrowhead" markerWidth="8" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 8 3.5, 0 7" fill="#a855f7"/></marker></defs>
+<text x="117" y="44" fill="#a855f7" font-size="7" text-anchor="middle">إعادة</text>
+<text x="117" y="57" fill="#a855f7" font-size="7" text-anchor="middle">تأطير</text>
+<rect x="135" y="20" width="75" height="60" rx="10" fill="#0d2818" stroke="#10b981" stroke-width="1.5"/>
+<text x="172" y="45" fill="#10b981" font-size="10" text-anchor="middle" font-weight="bold">تركيز</text>
+<text x="172" y="60" fill="#6b6b8a" font-size="8" text-anchor="middle">طاقة إيجابية</text>
+<text x="172" y="73" fill="#6b6b8a" font-size="7" text-anchor="middle">موجهة للهدف</text>
+<text x="110" y="115" fill="#a855f7" font-size="9" text-anchor="middle" font-weight="bold">القلق = اهتمام + طاقة</text>
+<text x="110" y="132" fill="#6b6b8a" font-size="8" text-anchor="middle">المشكلة ليست وجوده</text>
+<text x="110" y="147" fill="#6b6b8a" font-size="8" text-anchor="middle">بل كيف تستخدمه</text>
+</svg>`,chess_knight:`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="10" width="180" height="180" fill="#0e0e1c" rx="4"/>${Array.from({length:8},(_,r)=>Array.from({length:8},(_,c)=>`<rect x="${10+c*22}" y="${10+r*22}" width="22" height="22" fill="${(r+c)%2===0?'#1e1e3a':'#13132a'}"/>`).join('')).join('')}<circle cx="21" cy="188" r="7" fill="#06b6d4"/><text x="21" y="192" fill="white" font-size="8" text-anchor="middle">A1</text><circle cx="186" cy="21" r="7" fill="#10b981"/><text x="186" y="25" fill="white" font-size="8" text-anchor="middle">H8</text><path d="M21,181 Q60,130 90,150 Q120,110 150,80 Q170,55 186,28" stroke="#a855f7" stroke-width="1.5" fill="none" stroke-dasharray="4,3" opacity=".8"/></svg>`,
+nim_game:`<svg viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">${Array.from({length:21},(_,i)=>`<rect x="${8+i*9}" y="40" width="7" height="28" fill="${i<1?'#10b981':'#4c1d95'}" rx="2" stroke="${i<1?'#34d399':'#6d28d9'}" stroke-width=".5"/>`).join('')}<text x="11" y="85" fill="#10b981" font-size="7">خذ 1</text><text x="100" y="20" fill="#a855f7" font-size="9" text-anchor="middle">21 عود — الأخير يخسر</text><text x="100" y="105" fill="#6b6b8a" font-size="7" text-anchor="middle">ابدأ بـ1 → يبقى 20 (مضاعف 4) = فوز مضمون</text></svg>`,
+prisoners:`<svg viewBox="0 0 210 160" xmlns="http://www.w3.org/2000/svg"><rect x="60" y="5" width="65" height="22" fill="#1e1e3a" stroke="#4c1d95" stroke-width="1" rx="4"/><text x="92" y="21" fill="#a855f7" font-size="9" text-anchor="middle">لاعب ب</text><rect x="5" y="38" width="48" height="20" fill="#1e1e3a" stroke="#06b6d4" stroke-width="1" rx="4"/><text x="29" y="53" fill="#06b6d4" font-size="8" text-anchor="middle">تعاون</text><rect x="5" y="105" width="48" height="20" fill="#1e1e3a" stroke="#ef4444" stroke-width="1" rx="4"/><text x="29" y="120" fill="#ef4444" font-size="8" text-anchor="middle">خيانة</text><rect x="5" y="68" width="48" height="20" fill="#1e1e3a" stroke="#a855f7" stroke-width="1" rx="4"/><text x="29" y="83" fill="#a855f7" font-size="8" text-anchor="middle">لاعب أ</text><rect x="60" y="38" width="58" height="28" fill="#1e1e3a" stroke="#1e1e3a" stroke-width="1" rx="3"/><text x="89" y="56" fill="#6b6b8a" font-size="9" text-anchor="middle">3,3</text><rect x="126" y="38" width="58" height="28" fill="#1e1e3a" stroke="#1e1e3a" stroke-width="1" rx="3"/><text x="155" y="56" fill="#6b6b8a" font-size="9" text-anchor="middle">0,5</text><rect x="60" y="105" width="58" height="28" fill="#1e1e3a" stroke="#1e1e3a" stroke-width="1" rx="3"/><text x="89" y="123" fill="#6b6b8a" font-size="9" text-anchor="middle">5,0</text><rect x="126" y="105" width="58" height="28" fill="#1e1e3a" stroke="#1e1e3a" stroke-width="1" rx="3"/><text x="155" y="123" fill="#6b6b8a" font-size="9" text-anchor="middle">1,1</text><text x="60" y="150" fill="#6b6b8a" font-size="7">كل خلية: (نتيجة أ، نتيجة ب)</text></svg>`,
+triangles_count:`<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg"><polygon points="100,15 10,150 190,150" fill="none" stroke="#a855f7" stroke-width="2"/><line x1="40" y1="95" x2="160" y2="95" stroke="#7c3aed" stroke-width="1.5"/><line x1="55" y1="150" x2="100" y2="15" stroke="#7c3aed" stroke-width="1.5" opacity=".6"/><line x1="145" y1="150" x2="100" y2="15" stroke="#7c3aed" stroke-width="1.5" opacity=".6"/><text x="100" y="148" fill="#6b6b8a" font-size="8" text-anchor="middle">عدّ كل المثلثات — صغيرة وكبيرة</text></svg>`
+};
+
+// ── Metadata ──
+const SECS_META = [
+  {n:"استدلال كمي",i:"🧠",c:"#7c3aed",d:{low:"الحس العددي يحتاج تطويراً. حل مسائل يومية وألعاب الأرقام تبنيه بسرعة.",mid:"قدرة حسابية جيدة. المسائل المركبة والحيلة الرياضية تحتاج مزيداً من الممارسة.",high:"ذكاء رياضي حاد. تحل المسائل المركبة بمنهجية وترى الأنماط العددية بسرعة."}},
+  {n:"ذكاء لغوي",i:"🔤",c:"#ec4899",d:{low:"التفكير اللغوي والاستدلال يحتاجان تقوية. قراءة متنوعة وتمارين الاستنتاج تساعد.",mid:"قدرة استدلالية جيدة. التناظرات المعقدة والمنطق اللغوي تحتاج مزيداً من التدريب.",high:"ذكاء لغوي عالٍ. تتعامل مع الاستدلال والتناظرات والمنطق بكفاءة واضحة."}},
+  {n:"تفكير مجرد",i:"📐",c:"#06b6d4",d:{low:"التفكير المجرد والمكاني يحتاج تطويراً. الشطرنج والألغاز الهندسية تُقوّيه.",mid:"جيد مع الأنماط البسيطة. الأنماط ثلاثية الأبعاد وعدّ الأشكال تحتاج مزيداً من التدريب.",high:"تفكير مجرد قوي. ترى الأنماط والعلاقات المكانية بسرعة وتُفكك التسلسلات بدقة."}},
+  {n:"تفكير منطقي",i:"🧩",c:"#10b981",d:{low:"مهارة حل المشكلات تحتاج تطويراً. الألغاز المنطقية وتمارين التفكير النقدي تساعد.",mid:"قدرة منطقية معقولة. المسائل متعددة الخطوات والتحيزات المعرفية تحتاج مزيداً.",high:"تفكير منطقي حاد. تُحلل المشكلات المعقدة وتتجنب أفخاخ التفكير بكفاءة عالية."}},
+  {n:"ذكاء عاطفي",i:"❤️",c:"#f59e0b",d:{low:"الوعي العاطفي يحتاج تطويراً. التأمل وقراءة سير ذاتية وتدريبات الاتصال الفعّال تساعد.",mid:"وعي عاطفي جيد. إدارة العلاقات الصعبة والحدود الشخصية تحتاج مزيداً من التطوير.",high:"ذكاء عاطفي عالٍ. تقرأ الناس وتُنظّم مشاعرك وتُدير العلاقات بمهارة نادرة."}}
+];
+
+const ELO_TIERS=[
+  {min:200,max:400,n:"ما دون المتوسط",d:"الإمكانات كامنة — تحتاج توجيهاً وتطويراً منهجياً",chess:"مبتدئ"},
+  {min:400,max:600,n:"مستوى تطويري",d:"بداية الوعي بأنماط التفكير — الطريق واضح",chess:"هاوٍ"},
+  {min:600,max:800,n:"مستوى متعلم",d:"قاعدة صلبة للنمو — يحتاج تعميقاً وتدريباً منتظماً",chess:"متعلم"},
+  {min:800,max:1000,n:"مستوى متوسط",d:"يفوق نصف الناس في التفكير المتكامل",chess:"متوسط"},
+  {min:1000,max:1200,n:"فوق المتوسط",d:"وعي تحليلي واضح — يعادل قبول جامعات متوسطة المستوى",chess:"لاعب جيد"},
+  {min:1200,max:1500,n:"مستوى متقدم",d:"نادر — تفكير متعدد الأبعاد بعمق ملحوظ. يعادل SAT 1350+",chess:"متقدم"},
+  {min:1500,max:1800,n:"مستوى خبير",d:"أعلى 10% — ذكاء شامل ومتوازن. GRE Quant 90th percentile",chess:"خبير"},
+  {min:1800,max:2200,n:"مستوى ماهر جداً",d:"أعلى 3% — عقل استثنائي في محاور متعددة. مستوى MENSA",chess:"ماستر"},
+  {min:2200,max:2700,n:"مستوى بارز",d:"أعلى 1% — نادر ومُلهم. يعادل أفضل 1% في اختبارات GRE",chess:"غراند ماستر"},
+  {min:2700,max:3201,n:"مستوى أسطوري",d:"خارج المعايير — عبقرية متكاملة في كل الأبعاد",chess:"كبار العالم"}
+];
+
+const MBTI_DATA={
+  INTJ:{n:"المهندس المعماري",d:"رؤية استراتيجية عميقة وقدرة على إعادة تشكيل الأنظمة. قليل الكلام، كثير التأثير. أنهم يرون العواقب قبل حدوثها."},
+  INTP:{n:"المنطقي",d:"يُفكك المفاهيم ويبني من الصفر. يرى التناقضات التي يتجاوزها الآخرون — لا يهدأ حتى يجد التفسير الأعمق."},
+  ENTJ:{n:"القائد",d:"يُحرّك المنظومات ويُعيد هيكلتها. لا يقبل الكفاءة المنخفضة ويرى الفرص حيث يرى الآخرون عقبات."},
+  ENTP:{n:"المناظر",d:"يُشعل الأفكار ويُقلّب الحقائق. يرى كل شيء قابلاً للتطوير ويجد الجدل محفّزاً لا مُنهِكاً."},
+  INFJ:{n:"المستشار",d:"نادر — يجمع الحدس العميق بالالتزام بالقيم. يرى ما لا يراه الآخرون في الناس والمواقف."},
+  INFP:{n:"الوسيط",d:"عالم داخلي غني ومتوهّج. يبحث عن المعنى وراء كل شيء ولا يقبل السطحية في العلاقات والأفكار."},
+  ENFJ:{n:"البطل",d:"مُلهم طبيعي يُوقظ إمكانات الآخرين. يرى الناس بعيونهم المستقبلية لا حالتهم الحاضرة."},
+  ENFP:{n:"الناشط",d:"عاطفة لا تُكبح ورؤية لا تنضب. يحوّل الاحتمالات إلى واقع بشغف وإبداع — يصعب تحديده."},
+  ISTJ:{n:"المفتش",d:"العمود الفقري لأي مؤسسة. يُنجز ما التزم به بإتقان لا هوادة فيه — الثقة الحقيقية."},
+  ISFJ:{n:"المدافع",d:"يُعطي في صمت ويتذكر كل التفاصيل. ولاؤه لمن يحب لا حدود له — قوة تكمن في الهدوء."},
+  ESTJ:{n:"المدير",d:"يُحب النظام ويُطبّقه بصرامة. يُدير الفوضى ويُعيد الأمور لمساراتها الصحيحة."},
+  ESFJ:{n:"القنصل",d:"يُشعر من حوله بالانتماء الحقيقي. يرى الهرمونيا الاجتماعية غاية لا وسيلة."},
+  ISTP:{n:"الحرفي",d:"يفهم الأشياء بلمسها وتفكيكها. يحل الأعطال بسرعة ودقة متناهية — عملي حتى النخاع."},
+  ISFP:{n:"المغامر",d:"يعيش بشدة اللحظة ويعبّر بكل حواسه. الجمال ليس ترفاً بل ضرورة وجودية."},
+  ESTP:{n:"رجل الأعمال",d:"يتحرك بسرعة الغزال في بيئات الضغط. يرى الفرصة ويلتقطها قبل أن يلاحظها الآخرون."},
+  ESFP:{n:"المسلّي",d:"يُضخ الحياة في أي بيئة يدخلها. يعيش بعمق حقيقي ويجعل الآخرين يعيشون معه."}
+};
+
+// ── STATE ──
+function shuffle(a){let r=[...a];for(let i=r.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+
+function buildQSet(){
+  // Shuffle sections 0-4, keep MBTI (5) last
+  const secOrder=[...shuffle([0,1,2,3,4]),5];
+  let qs=[];
+  secOrder.forEach(s=>{
+    let sq=shuffle([...QDB[s]]);
+    sq.forEach(q=>qs.push({...q,s}));
+  });
+  return qs;
+}
+
+let ST={screen:'landing',user:{name:'',age:0,gender:'',type:'ضيف'},cur:0,qs:[],ans:[],timer:null,secs:300,sc:{iq:0,eq:0,str:0,phy:0,men:0,e:0,i:0,n:0,s:0,t:0,f:0,j:0,p:0},hearts:3,usedBack:new Set()};
+let curVis=null;
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+function socialNotReady(btn){
+  const orig=btn.innerHTML;
+  btn.style.borderColor='var(--gold)';
+  btn.style.color='var(--gold)';
+  btn.textContent='قريباً — قيد التطوير';
+  setTimeout(()=>{btn.innerHTML=orig;btn.style.borderColor='';btn.style.color='';},2500);
+}
+
+function showReg(t){
+  ST.user.type=t==='login'?'مسجل':'ضيف';
+  document.getElementById('regTitle').textContent=t==='login'?'تسجيل الدخول':'المشاركة كضيف';
+  document.getElementById('regSub').textContent=t==='login'?'أدخل بياناتك للبدء':'بضعة معلومات بسيطة فقط';
+  showScreen('registration');
+}
+
+function selGender(g,btn){document.querySelectorAll('.gender-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');ST.user.gender=g;}
+
+function startIntro(){
+  const name=document.getElementById('userName').value.trim();
+  const age=parseInt(document.getElementById('userAge').value);
+  if(!name){alert('الرجاء إدخال اسمك');return;}
+  if(!age||age<13||age>90){alert('الرجاء إدخال عمر صحيح (13-90)');return;}
+  if(!ST.user.gender){alert('الرجاء اختيار الجنس');return;}
+  ST.user.name=name;ST.user.age=age;
+  showScreen('intro');
+}
+
+function startQuiz(){
+  ST.cur=0;ST.qs=buildQSet();ST.ans=new Array(ST.qs.length).fill(null);
+  ST.sc={iq:0,eq:0,str:0,phy:0,men:0,e:0,i:0,n:0,s:0,t:0,f:0,j:0,p:0};
+  ST.hearts=3;ST.usedBack=new Set();
+  showScreen('quiz');renderQ();
+}
+
+function openLbox(){
+  if(!curVis||!SVGS[curVis])return;
+  document.getElementById('lboxSvg').innerHTML=SVGS[curVis];
+  document.getElementById('lboxCap').textContent=ST.qs[ST.cur].vc||'رسم توضيحي';
+  document.getElementById('lbox').classList.add('open');
+}
+function closeLbox(){document.getElementById('lbox').classList.remove('open');}
+
+function goBackQ(){
+  if(ST.cur<=0||ST.hearts<=0)return;
+  if(!ST.usedBack.has(ST.cur)){ST.hearts=Math.max(0,ST.hearts-1);ST.usedBack.add(ST.cur);}
+  clearInterval(ST.timer);ST.cur=Math.max(0,ST.cur-1);renderQ();
+}
+
+function updateHearts(){
+  [1,2,3].forEach(i=>{
+    const el=document.getElementById('h'+i);
+    if(!el)return;
+    if(i<=ST.hearts){el.classList.remove('empty');el.textContent='❤️';}
+    else{el.classList.add('empty');el.textContent='🖤';}
+  });
+  const btn=document.getElementById('backQBtn');
+  if(btn)btn.disabled=(ST.cur<=0||ST.hearts<=0);
+}
+
+function renderQ(){
+  const q=ST.qs[ST.cur];
+  const sm=q.s===5?{n:'شخصية MBTI',i:'🎭',c:'#8b5cf6'}:SECS_META[q.s];
+  const diffMap={e:'سهل',m:'متوسط',h:'صعب'};
+  const diffClass={e:'diff-easy',m:'diff-med',h:'diff-hard'};
+  const pct=Math.round((ST.cur/100)*100);
+  document.getElementById('secBadge').textContent=sm.i+' '+sm.n+(q.s===5?' (لا يؤثر على ELO)':'');
+  document.getElementById('progTxt').textContent='السؤال '+(ST.cur+1)+' من 100';
+  document.getElementById('progPct').textContent=pct+'%';
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('qNum').innerHTML=`<span class="diff-badge ${diffClass[q.d]}">${diffMap[q.d]}</span>سؤال ${String(ST.cur+1).padStart(2,'0')} / 100`;
+  document.getElementById('qTag').textContent=q.t;
+  document.getElementById('qText').textContent=q.q;
+  const th=document.getElementById('qThumb');
+  if(q.v&&SVGS[q.v]){curVis=q.v;th.innerHTML=SVGS[q.v];th.style.display='block';}
+  else{curVis=null;th.style.display='none';}
+  const opts=document.getElementById('opts');opts.innerHTML='';
+  const L=['أ','ب','ج','د'];
+  q.o.forEach((o,i)=>{
+    const btn=document.createElement('button');btn.className='opt';
+    btn.innerHTML=`<span class="opt-l">${L[i]}</span>${o}`;
+    btn.onclick=()=>selOpt(i,btn);
+    if(ST.ans[ST.cur]===i)btn.classList.add('sel');
+    opts.appendChild(btn);
+  });
+  const dk=document.createElement('button');dk.className='opt dk';
+  dk.innerHTML='<span class="opt-l">؟</span>لا أعرف';
+  dk.onclick=()=>selOpt(-99,dk);
+  if(ST.ans[ST.cur]===-99)dk.classList.add('sel');
+  opts.appendChild(dk);
+  updateHearts();resetTimer();
+}
+
+function selOpt(idx,btn){document.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');ST.ans[ST.cur]=idx;}
+
+function resetTimer(){
+  clearInterval(ST.timer);ST.secs=300;updTimer();
+  ST.timer=setInterval(()=>{ST.secs--;updTimer();if(ST.secs<=0){clearInterval(ST.timer);nextQ(true);}},1000);
+}
+function updTimer(){
+  const m=Math.floor(ST.secs/60),s=ST.secs%60;
+  document.getElementById('tNum').textContent=m+':'+String(s).padStart(2,'0');
+  document.getElementById('tArc').style.strokeDashoffset=138.23*(1-ST.secs/300);
+  if(ST.secs<=60)document.getElementById('tArc').classList.add('urgent');
+  else document.getElementById('tArc').classList.remove('urgent');
+}
+
+function calcSc(){
+  const q=ST.qs[ST.cur];const ans=ST.ans[ST.cur];
+  if(ans===null||ans===-99)return;
+  const sc=q.sc;
+  if(q.c===-1){Object.keys(sc).forEach(k=>ST.sc[k]+=sc[k]);}
+  else if(ans===q.c){Object.keys(sc).forEach(k=>ST.sc[k]+=sc[k]);}
+}
+
+function nextQ(auto=false){
+  clearInterval(ST.timer);calcSc();
+  const nxt=ST.cur+1;
+  if(nxt>=100){showResults();return;}
+  const cs=ST.qs[ST.cur].s,ns=ST.qs[nxt].s;
+  if(cs!==ns){
+    const tr=document.getElementById('secTrans');
+    const nm=ns===5?{n:'شخصية MBTI',i:'🎭'}:SECS_META[ns];
+    const cm=cs===5?{n:'شخصية MBTI'}:SECS_META[cs];
+    document.getElementById('transIcon').textContent=nm.i;
+    document.getElementById('transTitle').textContent='✓ انتهى: '+cm.n;
+    document.getElementById('transSub').textContent='يبدأ الآن: '+nm.n;
+    tr.classList.add('show');
+    setTimeout(()=>{tr.classList.remove('show');ST.cur=nxt;renderQ();},2400);
+  }else{ST.cur=nxt;renderQ();}
+}
+
+function showResults(){showScreen('results');calcAndRender();}
+
+function saveToAdmin(elo,tier,mbtiCode,nIQ,nEQ,nSTR,nPHY,nMEN,mAge){
+  try{
+    const results=JSON.parse(localStorage.getItem('nexiq_results')||'[]');
+    results.push({
+      id:'usr_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+      name:ST.user.name,age:ST.user.age,gender:ST.user.gender,type:ST.user.type,
+      elo,tier:tier.n,iq:Math.round(nIQ*100),eq:Math.round(nEQ*100),
+      str:Math.round(nSTR*100),phy:Math.round(nPHY*100),men:Math.round(nMEN*100),
+      mbti:mbtiCode,mentalAge:mAge,
+      date:new Date().toISOString(),banned:false,banReason:''
+    });
+    localStorage.setItem('nexiq_results',JSON.stringify(results));
+  }catch(e){console.log('Save error:',e);}
+}
+
+function buildPersonalityProfile(nIQ, nEQ, nSTR, nPHY, nMEN, mbti, age) {
+  const scores = [{k:'iq',v:nIQ},{k:'eq',v:nEQ},{k:'str',v:nSTR},{k:'phy',v:nPHY},{k:'men',v:nMEN}];
+  scores.sort((a,b)=>b.v-a.v);
+  const top = scores[0].k;
+  const profiles = {
+    iq:  ["عقلك يعمل بمنهجية تحليلية واضحة — ترى الأرقام والأنماط قبل الآخرين.",
+          "تجيد تفكيك المشكلات المعقدة إلى خطوات منطقية قابلة للحل.",
+          "الدقة والمنطق يطغيان على أسلوبك في التعامل مع التحديات.",
+          "قدرتك على الاستدلال الكمي تجعلك ماهراً في التخطيط والتوقع.",
+          "تميل للبحث عن الإجابة الصحيحة قبل الإجابة السريعة.",
+          "هذا النوع من الذكاء مرتبط بالإنجاز الأكاديمي والتقني."],
+    eq:  ["تملك قدرة نادرة على قراءة المشاعر — مشاعرك ومشاعر الآخرين.",
+          "تُعالج المواقف الإنسانية بحساسية تجعل الناس يثقون بك بسرعة.",
+          "وعيك الذاتي يمنحك تحكماً في ردود أفعالك في المواقف الصعبة.",
+          "تُفضل الحلول التي تحترم الجانب الإنساني لا مجرد الحل الأمثل.",
+          "علاقاتك عميقة لأنك تستمع فعلاً لا تنتظر دورك في الكلام.",
+          "الذكاء العاطفي العالي مؤشر قوي على النجاح القيادي والاجتماعي."],
+    str: ["تفكيرك يمتد إلى ما وراء الخطوة الأولى — ترى عواقب العواقب.",
+          "تجيد توظيف الموارد المحدودة وتحديد الأولويات بدقة غير عادية.",
+          "تميل لتحليل المواقف من زوايا متعددة قبل اتخاذ أي قرار.",
+          "قدرتك على قراءة ديناميكيات اللعبة تمنحك ميزة في التفاوض.",
+          "تفكيرك الاستراتيجي يجعلك مناسباً لأدوار القيادة والتخطيط.",
+          "الخسارة الصغيرة اليوم لصالح الربح الكبير غداً — هذا أسلوبك."],
+    phy: ["ترى العلاقات المكانية والأنماط بسهولة تعجز عنها أدمغة كثيرة.",
+          "تجيد تخيّل الأشياء ثلاثية الأبعاد وتحريكها ذهنياً بدقة.",
+          "هذا النوع من الذكاء مرتبط بالإبداع الهندسي والفني.",
+          "تُحلل المسائل البصرية والهندسية بشكل بديهي ودون جهد كبير.",
+          "عقلك يُفكر بالصور والأشكال بنفس سهولة تفكير الآخرين بالكلمات.",
+          "الذكاء المكاني ميزة نادرة في مجالات التصميم والهندسة والفن."],
+    men: ["تملك عمقاً تحليلياً يجعلك تتساءل عما يُسلّم به الآخرون.",
+          "تُميز بين المعلومة والرأي بسهولة — هذه مهارة نقدية حقيقية.",
+          "المغالطات المنطقية وأفخاخ التفكير لا تمر عليك دون ملاحظة.",
+          "تُفضل الفهم العميق على الحل السريع السطحي.",
+          "قدرتك على التفكير النقدي تجعلك مرجعاً في المواقف الغامضة.",
+          "العمق الذهني يُترجم إلى قرارات أفضل على المدى البعيد."]
+  };
+  const lines = profiles[top] || profiles.iq;
+  const eloIQ = Math.round(200 + nIQ*1200);
+  const eloEQ = Math.round(200 + nEQ*1200);
+  const eloSTR = Math.round(200 + nSTR*1200);
+  // Determine IQ label
+  const iqPct = Math.round(nIQ*100);
+  const iqLabel = iqPct>=85?'استثنائي':iqPct>=70?'متقدم':iqPct>=50?'فوق المتوسط':iqPct>=35?'متوسط':'يحتاج تطوير';
+  return `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.6rem;margin-bottom:1.5rem">
+      <div style="font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1rem">ملفك الشخصي</div>
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem">
+        <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pl));display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">${top==='iq'?'🧠':top==='eq'?'❤️':top==='str'?'♟️':top==='phy'?'📐':'🧩'}</div>
+        <div>
+          <div style="font-weight:700;font-size:1rem;color:var(--text)">نمط ذكاء: ${profiles[top][0].split('—')[0].trim()}</div>
+          <div style="font-size:.78rem;color:var(--pl);font-family:'Space Mono',monospace">ذكاء عقلي: ${iqLabel} (${iqPct}%)</div>
+        </div>
+      </div>
+      <div style="font-size:.88rem;color:var(--muted);line-height:1.9">
+        ${lines.map((l,i)=>`<div style="padding:.2rem 0;border-bottom:1px solid rgba(30,30,58,.5)">${i+1}. ${l}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function calcAndRender(){
+  const sc=ST.sc,age=ST.user.age;
+  // Score mapping: iq=cognitive, eq=emotional, str=strategic, phy=spatial, men=depth
+  const nIQ =Math.min(Math.max(sc.iq, 0)/55, 1);   // quantitative+verbal+logical
+  const nEQ =Math.min(Math.max(sc.eq, 0)/85, 1);   // emotional intelligence
+  const nSTR=Math.min(Math.max(sc.str,0)/25, 1);   // strategic thinking
+  const nMEN=Math.min(Math.max(sc.men,0)/25, 1);   // mental depth
+  const nPHY=Math.min(Math.max(sc.phy,0)/8,  1);   // spatial/abstract
+  const comp=nIQ*.35+nEQ*.30+nSTR*.18+nMEN*.12+nPHY*.05;
+  const elo=Math.min(3200,Math.max(200,Math.round(200+comp*3000)));
+  const E=sc.e>0?'E':'I',N=sc.n>0?'N':'S',T=sc.t>0?'T':'F',J=sc.j>0?'J':'P';
+  const mbtiCode=E+N+T+J;
+  const mbti=MBTI_DATA[mbtiCode]||MBTI_DATA['INTP'];
+  const mAge=Math.round(age*(0.7+comp*.6));
+  const tier=ELO_TIERS.find(t=>elo>=t.min&&elo<t.max)||ELO_TIERS[ELO_TIERS.length-1];
+  saveToAdmin(elo,tier,mbtiCode,nIQ,nEQ,nSTR,nPHY,nMEN,mAge);
+  document.getElementById('resName').textContent='نتائج '+ST.user.name;
+  animELO(elo,tier);
+
+  const ladder=document.getElementById('eloLadder');ladder.innerHTML='';
+  ELO_TIERS.forEach(t=>{
+    const act=elo>=t.min&&elo<t.max;
+    const d=document.createElement('div');d.className='elo-rung'+(act?' act':'');
+    const fc=act?'linear-gradient(90deg,#7c3aed,#06b6d4)':'#1e1e3a';
+    d.innerHTML=`<span class="elo-rng">${t.min}–${t.max<3201?t.max:'3200'}</span><div class="elo-rb"><div class="elo-rbf" style="width:${act?'100%':'22%'};background:${fc}"></div></div><span class="elo-rl" style="color:${act?'#a855f7':'#6b6b8a'}">${t.n}</span><span class="elo-rc">♟ ${t.chess}</span>`;
+    ladder.appendChild(d);
+  });
+
+  // ── Personality profile (6 lines based on dominant scores) ──
+  const personalityProfile = buildPersonalityProfile(nIQ, nEQ, nSTR, nPHY, nMEN, mbtiCode, age);
+  const profileEl = document.getElementById('personalityProfile');
+  if(profileEl) profileEl.innerHTML = personalityProfile;
+
+  const sr=document.getElementById('secRes');sr.innerHTML='<div style="font-family:\'Space Mono\',monospace;font-size:.68rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.9rem">تحليل تفصيلي بكل قسم</div>';
+  const norms=[nIQ,nEQ,(Math.abs(sc.e)+Math.abs(sc.n)+Math.abs(sc.t)+Math.abs(sc.j))/40,nPHY,nSTR];
+  SECS_META.forEach((meta,i)=>{
+    const n=norms[i];const pct=Math.round(Math.min(n,1)*100);
+    const dk=n<0.4?'low':n<0.7?'mid':'high';
+    const card=document.createElement('div');card.className='sec-rc';
+    card.style.setProperty('--sc',meta.c);
+    card.innerHTML=`<div class="sec-rh"><span class="sec-ri">${meta.i}</span><span class="sec-rn">${meta.n}</span><span class="sec-pct" style="background:${meta.c}22;color:${meta.c}">${pct}%</span></div><div class="sec-rb-wrap"><div class="sec-rb-fill" style="width:0%;background:linear-gradient(90deg,${meta.c},${meta.c}88)"></div></div><div class="sec-rd">${meta.d[dk]}</div>`;
+    sr.appendChild(card);
+    setTimeout(()=>{card.querySelector('.sec-rb-fill').style.width=pct+'%';},300+i*100);
+  });
+
+  const mAgeStr=mAge>age?`${mAge} سنة (+${mAge-age})`:`${mAge} سنة`;
+  const cards=[
+    {i:'🧠',l:'استدلال كمي',v:Math.round(nIQ*100)+'%',s:'أرقام، منطق، استدلال',b:nIQ,c:'#7c3aed'},
+    {i:'❤️',l:'ذكاء عاطفي',v:Math.round(nEQ*100)+'%',s:'وعي ذاتي، تعاطف، علاقات',b:nEQ,c:'#ec4899'},
+    {i:'♟️',l:'تفكير استراتيجي',v:Math.round(nSTR*100)+'%',s:'تخطيط، نظرية ألعاب، قرارات',b:nSTR,c:'#f59e0b'},
+    {i:'📐',l:'تفكير مجرد',v:Math.round(nPHY*100)+'%',s:'أنماط، فضاء، هندسة',b:nPHY,c:'#06b6d4'},
+    {i:'🧩',l:'عمق ذهني',v:Math.round(nMEN*100)+'%',s:'تحليل نقدي، وعي معرفي',b:nMEN,c:'#10b981'},
+    {i:'🎂',l:'عمر العقل',v:mAgeStr,s:'عمرك الفعلي: '+age+' سنة',b:Math.min(mAge/70,1),c:'#8b5cf6'},
+  ];
+  const dg=document.getElementById('dgrid');dg.innerHTML='';
+  cards.forEach((card,i)=>{
+    const d=document.createElement('div');d.className='dc';
+    d.style.setProperty('--ca',`linear-gradient(90deg,${card.c},${card.c}88)`);
+    d.innerHTML=`<div class="dc-icon">${card.i}</div><div class="dc-lbl">${card.l}</div><div class="dc-val">${card.v}</div><div class="dc-sub">${card.s}</div><div class="dc-bar"><div class="dc-barf" style="width:0%;background:linear-gradient(90deg,${card.c},${card.c}88)"></div></div>`;
+    dg.appendChild(d);setTimeout(()=>{d.querySelector('.dc-barf').style.width=Math.round(card.b*100)+'%';},300+i*100);
+  });
+
+  document.getElementById('mbtiType').textContent=mbtiCode;
+  document.getElementById('mbtiName').textContent=mbti.n;
+  document.getElementById('mbtiDesc').textContent=mbti.d;
+
+  const traits=[
+    {n:E==='E'?'انبساطية':'انطوائية',v:Math.abs(sc.e)/(Math.abs(sc.e)+20)*100+50,c:'#7c3aed'},
+    {n:N==='N'?'حدسية':'حسية',v:Math.abs(sc.n)/(Math.abs(sc.n)+20)*100+50,c:'#06b6d4'},
+    {n:T==='T'?'تفكيرية':'شعورية',v:Math.abs(sc.t)/(Math.abs(sc.t)+20)*100+50,c:'#ec4899'},
+    {n:J==='J'?'حكمية':'إدراكية',v:Math.abs(sc.j)/(Math.abs(sc.j)+20)*100+50,c:'#10b981'},
+  ];
+  const tr=document.getElementById('trRows');tr.innerHTML='';
+  traits.forEach(t=>{
+    const p=Math.min(95,Math.max(55,t.v));
+    const row=document.createElement('div');row.className='tr-row';
+    row.innerHTML=`<span class="tr-name">${t.n}</span><div class="tr-bar"><div class="tr-barf" style="width:0%;background:linear-gradient(90deg,${t.c},${t.c}88)"></div></div><span class="tr-pct">${Math.round(p)}%</span>`;
+    tr.appendChild(row);setTimeout(()=>{row.querySelector('.tr-barf').style.width=p+'%';},500);
+  });
+}
+
+function animELO(finalElo,tier){
+  let cur=200;const dur=2500,t0=performance.now();
+  const eEl=document.getElementById('eloNum'),arc=document.getElementById('eloArc');
+  function ease(t){return 1-Math.pow(1-t,3);}
+  function tick(now){
+    const el=now-t0,p=Math.min(el/dur,1),e=ease(p);
+    cur=Math.round(200+(finalElo-200)*e);
+    eEl.textContent=cur.toLocaleString('ar');
+    arc.style.strokeDashoffset=534*(1-(cur-200)/3000);
+    if(p<1)requestAnimationFrame(tick);
+    else{eEl.textContent=finalElo.toLocaleString('ar');document.getElementById('eloLbl').textContent=tier.n;document.getElementById('eloTName').textContent=tier.n;document.getElementById('eloTDesc').textContent=tier.d;}
+  }
+  requestAnimationFrame(tick);
+}
+
+function restart(){ST.cur=0;ST.ans=[];ST.sc={iq:0,eq:0,str:0,phy:0,men:0,e:0,i:0,n:0,s:0,t:0,f:0,j:0,p:0};ST.hearts=3;ST.usedBack=new Set();showScreen('landing');}
+</script>
+</body>
+</html>
